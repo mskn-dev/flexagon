@@ -43,10 +43,12 @@
     Flexagon.prototype = {
 
         init: function(options) {
+        
         var self = this;
         
   		var startWidth = parseInt($('.fgDisplay', this.element).attr('width'));
   		var id = "";
+  		
 //	When calling with the option "multi", make sure that the ids for all the associated
 // elements end with the id for the parent gallery
   
@@ -57,18 +59,21 @@
           	"gal"			:	$(".fgGallery", this.element),
    			"displayImg"	: 	$('.fgDisplay', this.element),
           	"id"			:	id,
-    // Define references to elements that can live anywhere. Names can be changed in settings.
+// Define references to elements that can live anywhere. Names can be changed in settings.
           	"drawer"   		:	$('#'+this.options["drawerName"]+id),
           	"nav"   		:	$('#'+this.options["navName"]+id),
           	"info"   		:	$('#'+this.options["infoName"]+id),
           	"button"   		:	$('#'+this.options["buttonName"]+id),
-          	
           	"startWidth"   	:	startWidth,
           	"startHeight" 	:	0
-          	
           	};
        		 
+// Add fGallery to options
     	    this.options = $.extend( {}, options, fGallery);
+    	    
+    	    if (this.options["maxHeight"] == null) this.options["maxHeight"] = $(this.element).parent().height();
+    	    if (this.options["maxWidth"] == null) this.options["maxWidth"] = $(this.element).parent().width();
+    	    
         
             // Place initialization logic here
             // You already have access to the DOM element and
@@ -85,7 +90,8 @@
 //        	set globals
 //        	bind controls, keys
 //		var galToggle = this.galToggle(this.button, "farts");
-		this.element.data = this.options;
+		
+				this.element.data = this.options;
 		this.options["button"].on("click", function() {self.galToggle(self.element);});		
       console.log(this.options);
       
@@ -101,7 +107,7 @@
 //                		  
                       var lastActive = $('.'+options['thmbName']+' img.active', options["drawer"]);
 //                
-                // detect first or last images in gallery
+// detect first or last images in gallery
                       
                       if (toggle=="prev"){
                 	  	lastActive.parent().prev().children('img').addClass('active');
@@ -111,75 +117,66 @@
                 		lastActive.parent().next().children('img').addClass('active');
                 		lastActive.removeClass('active');
                       }
-                // set this after updating .active
+// set this after updating .active
                 	  // possibly not necessary if we're preloading
                 	 options["gal"].addClass('loading');
                 	  // if we do the .prev .now .next thing, could just set this to hide() instead of remove
-//                	  gallery.children("img:first").remove();
-//                	  
-                // try to clean this up, make it more selector agnostic
+                	  options["gal"].children("img:first").remove();
+
+// Get image information from the drawer list
+
                 	  var activeImg = $('.'+options['thmbName']+' img.active', options["drawer"]);
                   	  var imgSrc=activeImg.next('.link').html();
                 	  var imgCaption=activeImg.next().next('.'+options["capName"]).html();
                 	  
-//                	  var imgTitle=activeImg.attr('alt');      
-//                	  
-//                      var img = new Image();
-//                      	$(img).load(function () {
+                	  var imgTitle=activeImg.attr('alt');      
+                      var img = new Image();
+                      
+                      
+                      	$(img).load(function () {
 //                      	
-                //      	#TODO:: error handling goes in the params of the complete >>> function complete(responseText, textStatus, XMLHttpRequest)] / http://api.jquery.com/load/
-//                
-//                			$(this).hide();
-//                			gallery.append(this);
-//                	 		gallery.removeClass('loading');
-//                		  var currentHeight = 300;
-//                		  
-                // possibly add the large image onclick bind here
+//      	#TODO:: error handling goes in the params of the complete >>> function complete(responseText, textStatus, XMLHttpRequest)] / http://api.jquery.com/load/
+                			$(this).hide();
+                			options["gal"].append(this);
+                	 		options["gal"].removeClass('loading');
+	                		var currentHeight = 0;
+//TODO:: possibly add the large image onclick bind here
                 // figure out image dimensions	  
-//                	  if (gallery.hasClass('fullscreen')){
-                // note w4 margin
-//                		$(this).css('max-width', ($(window).width()-90));
-//                		$(this).css('max-height', ($(window).height()-90));
-//                	    currentHeight = $(window).height();
-//                	  }
-                // w4 only
-//                	  
-//                	  else if(gallery.hasClass('splashy')) {
-//                
-//                	 $(this).css({'max-height': $('#splash').height(), 
-//                			'max-width': $('#splash').width(), 
-//                						 });
-//                	    currentHeight = ($('#splash').height());
-//                	  }
-//                	 
-                // end w4 only
-//                	  
-//                	  else {
-//                	  		if (activeImg.width() > activeImg.height()){
-//                	    	  	$(this).removeAttr('height');
-//                		   		$(this).attr('width', gallery.css("width")); 
-//                	    	}
-//                	  		else {
-//                			    $(this).removeAttr('width');
-//                				$(this).attr('height', startHeight);    
-//                	  		}
-//                		  	currentHeight = $(this).height();
-//                		}
-//                		        
-//                		gallery.animate({height: currentHeight}, 500, function(){		    
-//                		      $(img).fadeIn(function(){
-//                		     	$('.title', description).html(imgTitle);
-//                				$('.caption', description).html(imgCaption);	     	
-//                		  		});
-//                			});
-//                		}).attr({
-//                		  src: imgSrc,
-//                		  alt: imgTitle,
-//                	  	  class: 'largeImage'}); 
-//              
-//                    
-        console.log(this.options["propertyName"]);
-            // some logic
+                	  if (options["gal"].hasClass('fullscreen')){
+	                		$(this).css('max-width', $(window).width()-10);
+	                		$(this).css('max-height', $(window).height()-10);
+	                	    currentHeight = $(window).height();
+                	  }
+                	  
+                	  else {
+           
+          
+                	  		if (activeImg.width() > activeImg.height()){
+                	    	  	$(this).removeAttr('height');
+                		   		$(this).attr('width', gallery.css("width")); 
+                	    	}
+                	  		else {
+                			    $(this).removeAttr('width');
+                				$(this).attr('height', options["maxHeight"]);    
+                	  		}
+           //TODO:: ok, here's an issue -- look down at the call the displayImg.load
+                		  	currentHeight = $(this).height();
+                		}
+                		option["gal"].animate({"height": currentHeight}, 500, function(){	
+                			    
+                		      $(img).fadeIn(function(){
+                		     	$('.fgTitle', options["imgInfo"]).html(imgTitle);
+                				$('.fgCption', options["imgInfo"]).html(imgCaption);	     	
+                		  		});
+                			});
+                		}).attr({
+                		  "src": imgSrc,
+                		  "alt": imgTitle,
+//TODO:: make sure you don't need .largeImage anymore
+                	  	  "class": 'largeImage'});
+                	  	  
+
+//        console.log(this.options["propertyName"]);
         },
         
         galToggle: function(el, options, toggle) {
