@@ -41,26 +41,29 @@
     Flexagon.prototype = {
 
         init: function(options) {
-//        var self = this;
+        var self = this;
         
-        // Define references to elements that live inside gallery element. Not alterable in settings.
-          var fGallery = { };
-    		this.gal = $(".fgGallery", this.element);
-    		this.displayImg = $('.fgDisplay', this.element);
-            this.gal = $(".fgGallery", this.element);
-                    
-    		this.id = "";
-    		if (this.options["galleryType"] == "multi") this.id = $(this.element).attr("id"); 
-    
+  		var startWidth = parseInt($('.fgDisplay', this.element).attr('width'));
+  		var id = "";
+  		if (this.options["galleryType"] == "multi") id = $(this.element).attr("id");
+  		
+          var fGallery = { 
+// Define references to elements that live inside gallery element. Not alterable in settings.
+          	"gal"			:	 $(".fgGallery", this.element),
+   			"displayImg"	: $('.fgDisplay', this.element),
+          	"id"			:	"",
     // Define references to elements that can live anywhere. Names can be changed in settings.
-    	
-    		this.drawer = $('#'+this.options["drawerName"]+this.id);
-    		this.nav = $('#'+this.options["navName"]+this.id);
-    		this.info = $('#'+this.options["infoName"]+this.id);
-    		this.button = $('#'+this.options["buttonName"]+this.id);
-    		
-            this.startWidth = parseInt(this.displayImg.attr('width')); 
-    		this.startHeight = 0;
+          	"drawer"   		:	$('#'+this.options["drawerName"]+id),
+          	"nav"   		:	$('#'+this.options["navName"]+id),
+          	"info"   		:	$('#'+this.options["infoName"]+id),
+          	"button"   		:	$('#'+this.options["buttonName"]+id),
+          	
+          	"startWidth"   	:	startWidth,
+          	"startHeight" 	:	0
+          	
+          	};
+       		 
+    	    this.options = $.extend( {}, options, fGallery);
         
             // Place initialization logic here
             // You already have access to the DOM element and
@@ -77,9 +80,11 @@
 //        	set globals
 //        	bind controls, keys
 //		var galToggle = this.galToggle(this.button, "farts");
-//		this.button.on("click", function () {self.galToggle(self.id);});		
-      console.log(this.element);
-      
+
+//		this.galToggle.fGallery = "blunk";
+this.options["button"].css("color", "red");
+//		fGallery["button"].on("click", this.galToggle(this.element, this.options, fGallery);});		
+      console.log(this.options);
       
         },
 
@@ -171,8 +176,8 @@
             // some logic
         },
         
-        galToggle: function(toggle) {	      
-	        	alert(self.id);
+        galToggle: function(el, options, toggle) {	      
+	        	alert(self.id+fGallery );
         }
     };
 
