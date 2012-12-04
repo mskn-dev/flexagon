@@ -90,91 +90,108 @@
 //        	set globals
 //        	bind controls, keys
 //		var galToggle = this.galToggle(this.button, "farts");
+
+// Store reference to options in element.data
 		
-				this.element.data = this.options;
-		this.options["button"].on("click", function() {self.galToggle(self.element);});		
-      console.log(this.options);
-      
+		this.element.data = this.options;
+		
+		$("."+this.options['thmbName']+" img", this.options["drawer"]).on("click", function(){
+			$("."+self.options['thmbName']+" img.active", self.options["drawer"]).removeClass('active');
+			$(this).addClass('active');
+			self.swapImg(self.element, self.options);	    	
+		});
+
+		this.options["button"].on("click", function() {
+			self.options["drawer"].show();
+			self.galToggle(self.element);
+			
+			});		
+      		console.log(this.options);
         },
 
-        swapImg: function(el, options) {
+        swapImg: function(el, options, toggle) {
         
-        if (options == "") options = el.data;
+	      if (options == "") options = el.data;
         
-                	  if ($(".thumbnail img.active", options["drawer"]).length == 0) {
-                		this.imgSrc=$("."+options['thmbName'], options["drawer"]).filter(":first").children('img').addClass('active');
-                	  } 
-//                		  
-                      var lastActive = $('.'+options['thmbName']+' img.active', options["drawer"]);
-//                
+        
 // detect first or last images in gallery
-                      
-                      if (toggle=="prev"){
-                	  	lastActive.parent().prev().children('img').addClass('active');
-                		lastActive.removeClass('active');
-                      }
-                      else if (toggle == "next"){
-                		lastActive.parent().next().children('img').addClass('active');
-                		lastActive.removeClass('active');
-                      }
+          var lastActive = $('.'+options['thmbName']+' img.active', options["drawer"]);
+          switch (toggle) {
+          	case "prev":
+              	lastActive.parent().prev().children('img').addClass('active');
+              	lastActive.removeClass('active');
+              	break;
+          	
+          	case "next":
+          		lastActive.parent().next().children('img').addClass('active');
+          		lastActive.removeClass('active');
+          		break;
+          		
+          	default: 
+//TODO:: refresh function
+          }
+
 // set this after updating .active
-                	  // possibly not necessary if we're preloading
-                	 options["gal"].addClass('loading');
-                	  // if we do the .prev .now .next thing, could just set this to hide() instead of remove
-                	  options["gal"].children("img:first").remove();
+    	  // possibly not necessary if we're preloading
+    	 options["gal"].addClass('loading');
+    	  // if we do the .prev .now .next thing, could just set this to hide() instead of remove
+    	 options["gal"].children("img:first").remove();
+//  Add active to first thumbnail if there is none
+          if ($("."+options['thmbName']+"img.active", options["drawer"]).length == 0) {
+          	$("."+options['thmbName'], options["drawer"]).filter(":first").children('img').addClass('active');
+          } 
 
 // Get image information from the drawer list
 
-                	  var activeImg = $('.'+options['thmbName']+' img.active', options["drawer"]);
-                  	  var imgSrc=activeImg.next('.link').html();
-                	  var imgCaption=activeImg.next().next('.'+options["capName"]).html();
-                	  
-                	  var imgTitle=activeImg.attr('alt');      
-                      var img = new Image();
-                      
-                      
-                      	$(img).load(function () {
+    	  var activeImg = $('.'+options['thmbName']+' img.active', options["drawer"]);
+    
+//TODO:: fix the .link 
+	  	  var imgSrc=activeImg.next('.link').html();
+	  console.log(imgSrc);
+    	  var imgCaption=activeImg.next().next('.'+options["capName"]).html();
+    	  var imgTitle=activeImg.attr('alt');      
+          var img = new Image();
+
+          	$(img).load(function () {
 //                      	
-//      	#TODO:: error handling goes in the params of the complete >>> function complete(responseText, textStatus, XMLHttpRequest)] / http://api.jquery.com/load/
-                			$(this).hide();
-                			options["gal"].append(this);
-                	 		options["gal"].removeClass('loading');
-	                		var currentHeight = 0;
+// TODO:: error handling goes in the params of the complete >>> function complete(responseText, textStatus, XMLHttpRequest)] / http://api.jquery.com/load/
+//    			$(this).hide();
+    			options["gal"].append($(this));
+    	 		options["gal"].removeClass('loading');
+        		var currentHeight = 0;
 //TODO:: possibly add the large image onclick bind here
-                // figure out image dimensions	  
-                	  if (options["gal"].hasClass('fullscreen')){
-	                		$(this).css('max-width', $(window).width()-10);
-	                		$(this).css('max-height', $(window).height()-10);
-	                	    currentHeight = $(window).height();
-                	  }
-                	  
-                	  else {
-           
-          
-                	  		if (activeImg.width() > activeImg.height()){
-                	    	  	$(this).removeAttr('height');
-                		   		$(this).attr('width', gallery.css("width")); 
-                	    	}
-                	  		else {
-                			    $(this).removeAttr('width');
-                				$(this).attr('height', options["maxHeight"]);    
-                	  		}
-           //TODO:: ok, here's an issue -- look down at the call the displayImg.load
-                		  	currentHeight = $(this).height();
-                		}
-                		option["gal"].animate({"height": currentHeight}, 500, function(){	
-                			    
-                		      $(img).fadeIn(function(){
-                		     	$('.fgTitle', options["imgInfo"]).html(imgTitle);
-                				$('.fgCption', options["imgInfo"]).html(imgCaption);	     	
-                		  		});
-                			});
-                		}).attr({
-                		  "src": imgSrc,
-                		  "alt": imgTitle,
+    // figure out image dimensions	  
+    	  if (options["gal"].hasClass('fullscreen')){
+        		$(this).css('max-width', $(window).width()-10);
+        		$(this).css('max-height', $(window).height()-10);
+        	    currentHeight = $(window).height();
+    	  }
+    	  
+    	  else {
+    	  		if (activeImg.width() > activeImg.height()){
+    	    	  	$(this).removeAttr('height');
+    		   		$(this).attr('width', options["gal"].css("width")); 
+    	    	}
+    	  		else {
+    			    $(this).removeAttr('width');
+    				$(this).attr('height', options["maxHeight"]);    
+    	  		}
+//TODO:: ok, here's an issue -- look down at the call the displayImg.load
+    		  	currentHeight = $(this).height();
+    		}
+    		options["gal"].animate({"height": currentHeight}, 500, function(){	
+    			    
+    		      $(img).fadeIn(function(){
+    		     	$('.fgTitle', options["imgInfo"]).html(imgTitle);
+    				$('.fgCption', options["imgInfo"]).html(imgCaption);	     	
+    		  		});
+    			});
+    		}).attr({
+    		  src: imgSrc,
+    		  "alt": imgTitle,
 //TODO:: make sure you don't need .largeImage anymore
-                	  	  "class": 'largeImage'});
-                	  	  
+    	  	  "class": 'largeImage'});
+    	  	  
 
 //        console.log(this.options["propertyName"]);
         },
