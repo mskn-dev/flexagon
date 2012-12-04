@@ -1,0 +1,185 @@
+.gallery {
+ 
+      /* don't define height unless icon is sized  
+     height: 125px;
+      */
+    }
+    
+
+    .thumbnail img.active {
+      border:solid gold 2px; 
+    }
+    
+    .thumbnail img {
+      border:solid white 2px; 
+    }
+    
+    .thumbnail {
+   float: left;
+    text-align: center;
+    width: 72px;
+    }
+    .gallery-container {
+    margin:10px; 
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #CCCCCC;
+    float: left;
+    padding: 10px;
+    }
+    
+    
+    span.jqgal {
+      display:none;
+    }
+    
+    .image-description {
+	color: #555;
+	float: left;
+	font-size: 11px;
+	margin: 0px;
+	padding: 0px;
+	font-family: Helvetica;
+
+    }
+    
+    .splashy .image-description {
+   	position: absolute;
+	z-index: 150;
+	width:100%;
+	top:-25px;
+    }
+	.image-description .title {
+	font-weight:bold;
+	}
+.image-description div {
+	float:left;
+	padding:4px 4px;
+}
+    .caption, .title {
+    float:left;
+    }
+    
+      .previous, .next, .description-toggle {
+ 	background: none transparent;
+    text-align:center;
+    text-decoration: none;
+    width: 18px;
+    cursor:pointer;
+	float:left;
+	height:20px;
+    }
+    
+    .description-toggle {
+    font-family:Georgia, 'Times New Roman', serif;
+    display:none;
+    /*re-display when you figure out how to simply toggle the transparent background */
+    }
+    
+    .drawer-toggle, .fullscreen {
+    text-align:center;
+        cursor:pointer;
+        font-weight:normal;
+    width: 23px;
+	height: 11px;
+	float:left;
+	margin-top:5px;
+        
+    }
+    
+    .fullscreen {
+	background: url(fullscreen-white-trans.png) no-repeat 0px 0px transparent;
+display:none;
+	}
+	
+	.drawer-toggle {
+	background: url(thumbnails.png) no-repeat 0px 0px transparent;
+		}
+		
+		.fullscreen:hover, .drawer-toggle:hover {
+		background-position:0px -22px;
+		}
+
+		
+.previous:hover, .next:hover, .drawer-toggle:hover, .fullscreen:hover, .description-toggle:hover {
+ 	color: #fcec35;
+ }
+    
+    .drawer {
+    width:220px;
+    }
+
+    div .controls {
+    background:#dfdfdf;
+    float:right;
+	color: #FFFFFF;
+    font-family: helvetica;
+    font-size: 13px;
+    line-height:19px;
+    font-weight: bold;
+    padding:0px;
+    }
+    
+    .controls div {padding:0px;}
+    
+    
+    .gallery.fullscreen {
+    position:absolute;
+    z-index:700;
+    width:100%;
+    text-align:center;
+    background:url(transparent.png) transparent;
+    top:0;
+    left:0;
+    }
+    
+	 .gallery.open {
+    position:relative;
+    text-align:center;
+    background:none;
+    top:0;
+    left:0;
+    float:left;
+    
+    }
+    /* slideshow starting state */
+    
+	.gallery.collapsed {
+    width: 300px;
+	overflow: hidden;
+	margin: 10px;
+	float: left;
+	height: 175px;
+}
+
+.gallery.splashy {
+background-color:whitesmoke;
+display:none;
+text-align:center;
+width:100%;
+}
+
+
+.gallery.collapsed .image-description {
+display:none;
+}
+
+.overlay {
+    background:whitesmoke;
+    color:#333;
+    font-family: helvetica;
+    font-size: 13px;
+    line-height:19px;
+    font-weight: bold;
+    padding:10px;
+    border-bottom:1px solid black;
+    width: 500px;
+}
+
+.overlay h2{
+color: #333;
+cursor: pointer;
+}
+
+.overlay h2:hover{
+color: #F89D61;
+}

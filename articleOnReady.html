@@ -1,0 +1,53 @@
+<script type="text/javascript" > 
+
+//this should be in the plugin
+
+  	$('.drawer').live({
+      			mouseover: function(){
+			  $(this).animate({bottom: '0px'}, 160, 'easeOutCirc');
+  			},
+     			mouseleave: function(){
+			  $(this).animate({bottom:	'-64px'}, 160, 'easeInCirc');
+  			}});    
+  			
+  			
+$(document).ready(function() {
+
+			     /*
+    			function(){
+    			$(this).animate({top: 0}, 1500, "easeOutElastic",
+			  function(){
+			    $(this).css(top, -16);
+			  });
+  			});
+*/
+ 
+   
+  $('.overlay h2').click(function(){
+ 
+    $('#splash').animate({top: 50, height: marginheight}, 1500);
+    $('#content').animate({opacity: 'toggle'}, 
+			  1250, function(){ 
+			    $('#content').hide();
+		
+//		this is the goofy shit	   
+			    
+			    $('.gallery').height($('#splash').height()+15); 
+			    $('.largeImage').css({'max-height': ($('#splash').height()+15), 
+						  'max-width': $('#splash').width(), 
+						 });
+					
+			    $('.gallery').fadeIn();
+			    //  $('.galleryContainer').each(function(){startSlideshow($(this));});
+				});
+    $(window).unbind("resize");
+    $(window).bind("resize", function() {
+	$('#splash').resizenow(90, '45px');
+      //  	startSlideshow.swapImage();
+	});
+  });
+
+});
+
+
+</script>
