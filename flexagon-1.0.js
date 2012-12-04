@@ -16,6 +16,8 @@
         defaults = {
 // Settings for the id names for elements which can live outside the gallery element if you want
 		 'drawerName'		:	'fgDrawer',
+		 'capName'			:	'fgCaption',
+		 'thmbName'			:	'fgThumb',
          'buttonName'		:	'fgButton',
          'navName'			:	'fgNav',
          'imgInfo'			:	'fgInfo',
@@ -45,13 +47,16 @@
         
   		var startWidth = parseInt($('.fgDisplay', this.element).attr('width'));
   		var id = "";
-  		if (this.options["galleryType"] == "multi") id = $(this.element).attr("id");
+//	When calling with the option "multi", make sure that the ids for all the associated
+// elements end with the id for the parent gallery
+  
+  		if (this.options["galleryType"] == "multi") id = $(this.element).attr('id');
   		
           var fGallery = { 
 // Define references to elements that live inside gallery element. Not alterable in settings.
-          	"gal"			:	 $(".fgGallery", this.element),
-   			"displayImg"	: $('.fgDisplay', this.element),
-          	"id"			:	"",
+          	"gal"			:	$(".fgGallery", this.element),
+   			"displayImg"	: 	$('.fgDisplay', this.element),
+          	"id"			:	id,
     // Define references to elements that can live anywhere. Names can be changed in settings.
           	"drawer"   		:	$('#'+this.options["drawerName"]+id),
           	"nav"   		:	$('#'+this.options["navName"]+id),
@@ -80,42 +85,43 @@
 //        	set globals
 //        	bind controls, keys
 //		var galToggle = this.galToggle(this.button, "farts");
-
-//		this.galToggle.fGallery = "blunk";
-this.options["button"].css("color", "red");
-//		fGallery["button"].on("click", this.galToggle(this.element, this.options, fGallery);});		
+		this.element.data = this.options;
+		this.options["button"].on("click", function() {self.galToggle(self.element);});		
       console.log(this.options);
       
         },
 
         swapImg: function(el, options) {
         
-//                	  if ($(".thumbnail img.active", drawer).length == 0) {
-//                		this.imgSrc=$(".thumbnail", drawer).filter(":first").children('img').addClass('active');
-//                	  } 
+        if (options == "") options = el.data;
+        
+                	  if ($(".thumbnail img.active", options["drawer"]).length == 0) {
+                		this.imgSrc=$("."+options['thmbName'], options["drawer"]).filter(":first").children('img').addClass('active');
+                	  } 
 //                		  
-//                      var lastActive = $('.thumbnail img.active', drawer);
+                      var lastActive = $('.'+options['thmbName']+' img.active', options["drawer"]);
 //                
                 // detect first or last images in gallery
-//                      
-//                      if (toggle=="prev"){
-//                	  	lastActive.parent().prev().children('img').addClass('active');
-//                		lastActive.removeClass('active');
-//                      }
-//                      else if (toggle == "next"){
-//                		lastActive.parent().next().children('img').addClass('active');
-//                		lastActive.removeClass('active');
-//                      }
+                      
+                      if (toggle=="prev"){
+                	  	lastActive.parent().prev().children('img').addClass('active');
+                		lastActive.removeClass('active');
+                      }
+                      else if (toggle == "next"){
+                		lastActive.parent().next().children('img').addClass('active');
+                		lastActive.removeClass('active');
+                      }
                 // set this after updating .active
                 	  // possibly not necessary if we're preloading
-//                	  gallery.addClass('loading');
+                	 options["gal"].addClass('loading');
                 	  // if we do the .prev .now .next thing, could just set this to hide() instead of remove
 //                	  gallery.children("img:first").remove();
 //                	  
                 // try to clean this up, make it more selector agnostic
-//                	  var activeImg = $('.thumbnail img.active', drawer);
-//                  	  var imgSrc=activeImg.next('.link').html();
-//                	  var imgCaption=activeImg.next().next('.caption').html();
+                	  var activeImg = $('.'+options['thmbName']+' img.active', options["drawer"]);
+                  	  var imgSrc=activeImg.next('.link').html();
+                	  var imgCaption=activeImg.next().next('.'+options["capName"]).html();
+                	  
 //                	  var imgTitle=activeImg.attr('alt');      
 //                	  
 //                      var img = new Image();
@@ -176,8 +182,9 @@ this.options["button"].css("color", "red");
             // some logic
         },
         
-        galToggle: function(el, options, toggle) {	      
-	        	alert(self.id+fGallery );
+        galToggle: function(el, options, toggle) {
+               if (options == null) {options = el.data};	      
+	        	console.log(options["id"]);
         }
     };
 
