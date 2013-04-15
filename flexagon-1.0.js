@@ -15,12 +15,15 @@
     
         defaults = {
 // Settings for the id names for elements which can live outside the gallery element if you want
+// TODO: CLASSES IN CONTEXT OR IDS??
+
 		 'drawerName'		:	'fgDrawer',
 		 'capName'			:	'fgCaption',
 		 'thmbName'			:	'fgThumb',
          'buttonName'		:	'fgButton',
          'navName'			:	'fgNav',
          'imgInfo'			:	'fgInfo',
+         'link'				:	'fgLink',
 // If not explicitly set, maxHeight and maxWidth will be based on the dimensions of the containing element.       
          'maxHeight'		: null,
          'maxWidth'			: null,
@@ -51,6 +54,8 @@
   		
 //	When calling with the option "multi", make sure that the ids for all the associated
 // elements end with the id for the parent gallery
+//TODO:: make sure fgNext and fgPrev exist and are accounted for. should not be restricted to live in fgNav
+
   
   		if (this.options["galleryType"] == "multi") id = $(this.element).attr('id');
   		
@@ -146,8 +151,9 @@
     	  var activeImg = $('.'+options['thmbName']+' img.active', options["drawer"]);
     
 //TODO:: fix the .link 
-	  	  var imgSrc=activeImg.next('.link').html();
+	  	  var imgSrc=activeImg.next('.'+options["link"]).html();
 	  console.log(imgSrc);
+	  
     	  var imgCaption=activeImg.next().next('.'+options["capName"]).html();
     	  var imgTitle=activeImg.attr('alt');      
           var img = new Image();
@@ -179,15 +185,17 @@
 //TODO:: ok, here's an issue -- look down at the call the displayImg.load
     		  	currentHeight = $(this).height();
     		}
+    		
+    		// blah there's something here
     		options["gal"].animate({"height": currentHeight}, 500, function(){	
     			    
     		      $(img).fadeIn(function(){
     		     	$('.fgTitle', options["imgInfo"]).html(imgTitle);
-    				$('.fgCption', options["imgInfo"]).html(imgCaption);	     	
+    				$('.fgCaption', options["imgInfo"]).html(imgCaption);	     	
     		  		});
     			});
     		}).attr({
-    		  src: imgSrc,
+    		  "src": imgSrc,
     		  "alt": imgTitle,
 //TODO:: make sure you don't need .largeImage anymore
     	  	  "class": 'largeImage'});
@@ -197,8 +205,31 @@
         },
         
         galToggle: function(el, options, toggle) {
-               if (options == null) {options = el.data};	      
+               if (options == null) {options = el.data};
+               
+               	      
 	        	console.log(options["id"]);
+	        	
+	        	el.animate({height: currentHeight}, 500, function(){		    
+	        	      $(img).fadeIn(function(){
+	        	     	$('.title', description).html(imgTitle);
+	        			$('.caption', description).html(imgCaption);	     	
+	        	  		});
+	        		});
+	        	}).attr({
+	        	  src: imgSrc,
+	        	  alt: imgTitle,
+	        		  class: 'largeImage'}); 
+	        	
+	        	
+	        	
+	        	//TODO:: make stuff happen here
+	        	/*
+	        	"open" gallery
+	        	load src from options[drawer] img(1) in largeImg
+	        	get rid of the other bullshit around the gallery?
+	        	
+	        	*/
         }
     };
 
