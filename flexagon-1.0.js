@@ -109,12 +109,22 @@
 		this.options["button"].on("click", function() {
 			self.options["drawer"].show();
 			self.galToggle(self.element);
+//			self.swapImg(self.element, self.options);
 			
 			});		
       		console.log(this.options);
+      		$('#fgNext5555').on("click", function() {
+      		self.swapImg(self.element, self.options, "next");
+      		
+      		});
+      		
+      		
+      		
+
         },
 
         swapImg: function(el, options, toggle) {
+        var displayImage = $(".largeImage", el);
         
 	      if (options == "") options = el.data;
         
@@ -138,9 +148,9 @@
 
 // set this after updating .active
     	  // possibly not necessary if we're preloading
-    	 options["gal"].addClass('loading');
+    	 displayImage.addClass('loading');
     	  // if we do the .prev .now .next thing, could just set this to hide() instead of remove
-    	 options["gal"].children("img:first").remove();
+    	 displayImage.remove();
 //  Add active to first thumbnail if there is none
           if ($("."+options['thmbName']+"img.active", options["drawer"]).length == 0) {
           	$("."+options['thmbName'], options["drawer"]).filter(":first").children('img').addClass('active');
@@ -152,8 +162,13 @@
     
 //TODO:: fix the .link 
 	  	  var imgSrc=activeImg.next('.'+options["link"]).html();
-	  console.log(imgSrc);
-	  
+	 	 console.log(imgSrc);
+	 	 
+	 	 
+	 //XMARKS
+//	 Ok, so you need to review where it looks for the image src, and how it swaps out. Also does not trigger on image fade, and doesn't seem to be updating .active
+
+
     	  var imgCaption=activeImg.next().next('.'+options["capName"]).html();
     	  var imgTitle=activeImg.attr('alt');      
           var img = new Image();
@@ -186,7 +201,8 @@
     		  	currentHeight = $(this).height();
     		}
     		
-    		// blah there's something here
+    		// blah there's something here 
+    		// ok this is what's supposed to happen when the gallery starts. 
     		options["gal"].animate({"height": currentHeight}, 500, function(){	
     			    
     		      $(img).fadeIn(function(){
@@ -206,22 +222,24 @@
         
         galToggle: function(el, options, toggle) {
                if (options == null) {options = el.data};
-               
+//               TOTALLY ok to be doing this, because I need it within the scope of the animate callback. 
+               var self = this;
                	      
 	        	console.log(options["id"]);
 	        	
-	        	el.animate({height: currentHeight}, 500, function(){		    
-	        	      $(img).fadeIn(function(){
-	        	     	$('.title', description).html(imgTitle);
-	        			$('.caption', description).html(imgCaption);	     	
+	        	$(el).animate({height: options["maxHeight"]}, 500, function(){		    
+	        	      $("img", el).fadeIn(function(){
+	        	     	$('.title', options["imgInfo"]).html("flarb");
+	        			$('.caption', options["imgInfo"]).html('blarb');
+	        			// this	is how to call another method from a method        		
+		        		self.swapImg(el, options, "next");
+	        				     	
 	        	  		});
 	        		});
-	        	}).attr({
-	        	  src: imgSrc,
-	        	  alt: imgTitle,
-	        		  class: 'largeImage'}); 
+	        		
 	        	
 	        	
+	        		        	
 	        	
 	        	//TODO:: make stuff happen here
 	        	/*
