@@ -29,7 +29,7 @@
 // Set galleryType to "multi" if every gallery on a page will have its own drawer, navigation, and info area		      
          "galleryType"		: 'single'
                 };
-
+                
     function Flexagon( element, options ) {
 //    var self = this;
         this.element = element;
@@ -58,12 +58,13 @@
           	"info"   		:	$('#'+this.options["infoName"]+id),
           	"button"   		:	$('#'+this.options["buttonName"]+id),
           	"startWidth"   	:	startWidth,
+          	"next"			:	$('#'+this.options["nextName"]+id),
+         	"prev"			:	$('#'+this.options["prevName"]+id),
           	"startHeight" 	:	0
           	};
        		 
 // Add fGallery to options
     	    this.options = $.extend( {}, options, fGallery);
-    	    
     	    if (this.options["maxHeight"] == null) this.options["maxHeight"] = $(this.element).parent().height();
     	    if (this.options["maxWidth"] == null) this.options["maxWidth"] = $(this.element).parent().width();
     	    
@@ -101,28 +102,23 @@
 			
 			});		
 			
-			//TODO:: clean this up
-      		console.log(this.options);
-      		$('#fgNext5555').on("click", function() {
+// Activate buttons
+//TODO:: probably be more crap to do here
+
+      		this.options["next"].on("click", function() {
       		self.swapImg(self.element, self.options, "next");
       		});
-      		$('#fgPrev5555').on("click", function() {
+      		this.options["prev"].on("click", function() {
       		self.swapImg(self.element, self.options, "prev");
       		});
-      		
-      		
-      		
-
         },
 
         swapImg: function(el, options, toggle) {
-        var displayImage = $(".largeImage", el);
-        
-	      if (options == "") options = el.data;
-        
+        	var self = this
+	        var displayImage = $(".largeImage", el);
+		    if (options == "") options = el.data;
 // detect first or last images in gallery
           var lastActive = $('.'+options['thmbName']+' img.active', options["drawer"]);
-          
           switch (toggle) {
           	case "prev":
               	lastActive.parent().prev().children('img').addClass('active');
@@ -166,7 +162,9 @@
           var img = new Image();
 
           	$(img).load(function () {
-          	
+          	$(this).bind("click", function() 
+          		{self.swapImg(self.element, self.options, "next");
+          	});
     console.log("hello");
 //                      	
 // TODO:: error handling goes in the params of the complete >>> function complete(responseText, textStatus, XMLHttpRequest)] / http://api.jquery.com/load/
