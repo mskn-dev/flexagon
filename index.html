@@ -15,12 +15,17 @@
  	  $(document).ready(function(){ 
  	
  	     
- 		$('.galleryContainer').flexagon({"galleryType":"multi"});
+ 		$('#2222').flexagon({galleryType:"multi", maxHeight: "300"});
+ 		$('#5555').flexagon({galleryType:"multi"});
+// 		Here's how you call external methods.
+		$('#5555').flexagon('galToggle', "open");
+// 		$('.galleryContainer').flexagon('barf', "barf", "blarf");
 // 		$('body').defaultPluginName("yourOtherFunction");
 // 		$('h1').defaultPluginName({"propertyName": "jon sucks"}).defaultPluginName("yourOtherFunction");
  	});
  	
  	</script>
+ 
  
 
 

@@ -114,7 +114,8 @@
         },
 
         swapImg: function(el, options, toggle) {
-        	var self = this
+//        	if (el=="") el = element;
+        	var self = this;
 	        var displayImage = $(".largeImage", el);
 		    if (options == "") options = el.data;
 // detect first or last images in gallery
@@ -212,9 +213,14 @@
     	  	  "class": 'largeImage'});
         },
         
-        galToggle: function(el, options, toggle) {
-               if (options == null) {options = el.data};
+        galToggle: function(toggle, el, options) {
+        		if (el == null) el = $(this.element);
+               if (options == null) options = this.options;
+		        console.log($(this.element).attr('id')+", "+options['maxHeight']);
+               
 //               TOTALLY ok to be doing this, because I need it within the scope of the animate callback. 
+//TODO:: add "close" option
+	if (toggle == "open") console.log("open");
                var self = this;    
 //	        	console.log(options["id"]);
 	        	$(el).animate({height: options["maxHeight"]}, 500, function(){		    
@@ -226,6 +232,12 @@
 	        				     	
 	        	  		});
 	        		});
+        },
+        
+        barf: function(blerp, blorp) {
+        console.log($(this.element).attr('id')+", "+this.options['id']);
+        alert(blerp);
+        alert(blorp);
         }
     };
 
