@@ -12,16 +12,15 @@
 
     // Create the defaults once
     var flexagon = 'flexagon',
-    
         defaults = {
-// Settings for the id names for elements which can live outside the gallery element if you want
-// TODO: CLASSES IN CONTEXT OR IDS??
-
+// Settings for the id names for elements which can live outside the gallery element if you want. Using IDs instead of classes within context of gallery ID so they can live anywhere on the page
 		 'drawerName'		:	'fgDrawer',
 		 'capName'			:	'fgCaption',
 		 'thmbName'			:	'fgThumb',
          'buttonName'		:	'fgButton',
          'navName'			:	'fgNav',
+         'nextName'			:	'fgNext',
+         'prevName'			:	'fgPrev',
          'imgInfo'			:	'fgInfo',
          'link'				:	'fgLink',
 // If not explicitly set, maxHeight and maxWidth will be based on the dimensions of the containing element.       
@@ -33,32 +32,21 @@
 
     function Flexagon( element, options ) {
 //    var self = this;
-
         this.element = element;
 	    this.options = $.extend( {}, defaults, options) ;
         this._defaults = defaults;
         this._name = flexagon;
-
-		
         this.init(this.options);
     }
-
     Flexagon.prototype = {
-
         init: function(options) {
-        
         var self = this;
-        
   		var startWidth = parseInt($('.fgDisplay', this.element).attr('width'));
   		var id = "";
-  		
 //	When calling with the option "multi", make sure that the ids for all the associated
-// elements end with the id for the parent gallery
-//TODO:: make sure fgNext and fgPrev exist and are accounted for. should not be restricted to live in fgNav
-
-  
+//  elements end with the id for the parent gallery
+//  TODO:: make sure fgNext and fgPrev exist and are accounted for. should not be restricted to live in fgNav
   		if (this.options["galleryType"] == "multi") id = $(this.element).attr('id');
-  		
           var fGallery = { 
 // Define references to elements that live inside gallery element. Not alterable in settings.
           	"gal"			:	$(".fgGallery", this.element),
@@ -112,10 +100,14 @@
 //			self.swapImg(self.element, self.options);
 			
 			});		
+			
+			//TODO:: clean this up
       		console.log(this.options);
       		$('#fgNext5555').on("click", function() {
       		self.swapImg(self.element, self.options, "next");
-      		
+      		});
+      		$('#fgPrev5555').on("click", function() {
+      		self.swapImg(self.element, self.options, "prev");
       		});
       		
       		
@@ -128,9 +120,9 @@
         
 	      if (options == "") options = el.data;
         
-        
 // detect first or last images in gallery
           var lastActive = $('.'+options['thmbName']+' img.active', options["drawer"]);
+          
           switch (toggle) {
           	case "prev":
               	lastActive.parent().prev().children('img').addClass('active');
@@ -152,7 +144,7 @@
     	  // if we do the .prev .now .next thing, could just set this to hide() instead of remove
     	 displayImage.remove();
 //  Add active to first thumbnail if there is none
-          if ($("."+options['thmbName']+"img.active", options["drawer"]).length == 0) {
+          if ($("."+options['thmbName']+" img.active", options["drawer"]).length == 0) {
           	$("."+options['thmbName'], options["drawer"]).filter(":first").children('img').addClass('active');
           } 
 
@@ -174,6 +166,8 @@
           var img = new Image();
 
           	$(img).load(function () {
+          	
+    console.log("hello");
 //                      	
 // TODO:: error handling goes in the params of the complete >>> function complete(responseText, textStatus, XMLHttpRequest)] / http://api.jquery.com/load/
 //    			$(this).hide();
