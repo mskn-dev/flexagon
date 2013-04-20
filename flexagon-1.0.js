@@ -150,7 +150,7 @@
     
 //TODO:: fix the .link 
 	  	  var imgSrc=activeImg.next('.'+options["link"]).html();
-	 	 console.log(imgSrc);
+ console.log(imgSrc);
 	 	 
 	 	 
 	 //XMARKS
@@ -162,6 +162,7 @@
           var img = new Image();
 
           	$(img).load(function () {
+//	Need to bind on each load to add click-image-to-advance
           	$(this).bind("click", function() 
           		{self.swapImg(self.element, self.options, "next");
           	});
@@ -172,7 +173,7 @@
     			options["gal"].append($(this));
     	 		options["gal"].removeClass('loading');
         		var currentHeight = 0;
-//TODO:: possibly add the large image onclick bind here
+
     // figure out image dimensions	  
     	  if (options["gal"].hasClass('fullscreen')){
         		$(this).css('max-width', $(window).width()-10);
@@ -198,6 +199,8 @@
     		options["gal"].animate({"height": currentHeight}, 500, function(){	
     			    
     		      $(img).fadeIn(function(){
+    		      
+//TODO:    		      titles aren't addressed right
     		     	$('.fgTitle', options["imgInfo"]).html(imgTitle);
     				$('.fgCaption', options["imgInfo"]).html(imgCaption);	     	
     		  		});
@@ -207,18 +210,13 @@
     		  "alt": imgTitle,
 //TODO:: make sure you don't need .largeImage anymore
     	  	  "class": 'largeImage'});
-    	  	  
-
-//        console.log(this.options["propertyName"]);
         },
         
         galToggle: function(el, options, toggle) {
                if (options == null) {options = el.data};
 //               TOTALLY ok to be doing this, because I need it within the scope of the animate callback. 
-               var self = this;
-               	      
-	        	console.log(options["id"]);
-	        	
+               var self = this;    
+//	        	console.log(options["id"]);
 	        	$(el).animate({height: options["maxHeight"]}, 500, function(){		    
 	        	      $("img", el).fadeIn(function(){
 	        	     	$('.title', options["imgInfo"]).html("flarb");
@@ -228,18 +226,6 @@
 	        				     	
 	        	  		});
 	        		});
-	        		
-	        	
-	        	
-	        		        	
-	        	
-	        	//TODO:: make stuff happen here
-	        	/*
-	        	"open" gallery
-	        	load src from options[drawer] img(1) in largeImg
-	        	get rid of the other bullshit around the gallery?
-	        	
-	        	*/
         }
     };
 
