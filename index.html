@@ -16,7 +16,7 @@
  	
  	     
  		$('#2222').flexagon({galleryType:"multi", maxHeight: "300"});
- 		$('#5555').flexagon({galleryType:"multi"});
+ 		$('#5555').flexagon({galleryType:"multi", maxHeight: "800"});
 // 		Here's how you call external methods.
 		$('#5555').flexagon('galToggle', "open");
 // 		$('.galleryContainer').flexagon('barf', "barf", "blarf");
@@ -38,16 +38,16 @@
 <h2 id="top">Top</h2>
 <h2 id="bottom">bottom</h2>
 
-
-<div class="galleryContainer" id="5555" style="width:100%; overflow:auto;">
-<!--OVERLAY-->
 <div class="overlay">
   <h1>The Space Between</h1>
    <h2 id="fgButton5555">Start Slideshow 1 &gt;</h2>
  </div>
+
+<div class="galleryContainer" id="5555" style="width:100%;">
+<!--OVERLAY-->
 <!-- GALLERY -->
 
-	<div class="fgGallery" style="min-height: 300px; width: 400px;">
+	<div class="fgGallery" style="min-height: 300px; width: 100%;">
 	<!--  IMAGE DESCRIPTION-->
 	    <div class="image-description">
 	  	<div class="fgTitle">Navigate with arrow keys, the thumbnails below, or those buttons over there --&gt;</div>
@@ -64,7 +64,7 @@
 	  </div>
 	  
 	<!--  IMAGE -->
-	  <img class="largeImage" src="images/03.jpg" style="">
+	  <img class="fgDisplay" src="images/03.jpg" style="">
 	</div>
 <!--	END GALLERY-->
 </div>
@@ -94,7 +94,7 @@
 	  </div>
 	  
 	<!--  IMAGE -->
-	  <img class="largeImage" src="images/03.jpg" style="">
+	  <img class="fgDisplay" src="images/03.jpg" style="">
 	</div>
 <!--	END GALLERY-->
 </div>

@@ -21,14 +21,14 @@
          'navName'			:	'fgNav',
          'nextName'			:	'fgNext',
          'prevName'			:	'fgPrev',
-         'imgInfo'			:	'fgInfo',
-         'link'				:	'fgLink',
+         'infoName'			:	'fgInfo',
+         'linkName'			:	'fgLink',
 // If not explicitly set, maxHeight and maxWidth will be based on the dimensions of the containing element.       
          'maxHeight'		: null,
          'maxWidth'			: null,
 // Set galleryType to "multi" if every gallery on a page will have its own drawer, navigation, and info area		      
          "galleryType"		: 'single',
-         'margin'			:	45;
+         'margin'			:	45
                 };
                 
     function Flexagon( element, options ) {
@@ -56,6 +56,7 @@
 // Define references to elements that can live anywhere. Names can be changed in settings.
           	"drawer"   		:	$('#'+this.options["drawerName"]+id),
           	"nav"   		:	$('#'+this.options["navName"]+id),
+          	"link"			:	$('#'+this.options["linkName"]+id),
           	"info"   		:	$('#'+this.options["infoName"]+id),
           	"button"   		:	$('#'+this.options["buttonName"]+id),
           	"startWidth"   	:	startWidth,
@@ -63,19 +64,16 @@
          	"prev"			:	$('#'+this.options["prevName"]+id),
           	"startHeight" 	:	0
           	};
-       		 
-// Add fGallery to options
     	    this.options = $.extend( {}, options, fGallery);
-    	    if (this.options["maxHeight"] == null) this.options["maxHeight"] = $(this.element).parent().height();
-    	    if (this.options["maxWidth"] == null) this.options["maxWidth"] = $(this.element).parent().width();
     	    
-        
-            // Place initialization logic here
-            // You already have access to the DOM element and
-            // the options via the instance, e.g. this.element
-            // and this.options
-            // you can add more functions like the one below and
-            // call them like so: this.yourOtherFunction(this.element, this.options).
+//    	    Run _fit on resize. If fullscreen or liquid, _fit will refresh image when dimensions change. 
+//			Make gallery fixed-dimensions by making gallery container fixed-dimensions
+
+			if (this.options["maxHeight"] == null) this.options["maxHeight"] = this.options["gal"].height();
+			if (this.options["maxWidth"] == null) this.options["maxWidth"] = this.options["gal"].width();
+			console.log(this.options["gal"].width());
+			
+
         
 //        	bind drawer
 //        	bind trigger
@@ -107,58 +105,51 @@
 //TODO:: probably be more crap to do here
 
       		this.options["next"].on("click", function() {
-      		self.swapImg(self.element, self.options, "next");
+	      		self.swapImg(self.element, self.options, "next");
       		});
       		this.options["prev"].on("click", function() {
-      		self.swapImg(self.element, self.options, "prev");
+	      		self.swapImg(self.element, self.options, "prev");
       		});
         },
 
         swapImg: function(el, options, toggle) {
-//        	if (el=="") el = element;
-        	var self = this;
-	        var displayImage = $(".largeImage", el);
-		    if (options == "") options = el.data;
+        
+			var self = this;
+			var displayImage = $(".fgDisplay", el);
+//  Add active to first thumbnail if there is none
+			if ($("."+options['thmbName']+" img.active", options["drawer"]).length == 0) {
+				$("."+options['thmbName'], options["drawer"]).filter(":first").children('img').addClass('active');
+			}			
+// Get image information from the drawer list	
+			var activeImg = $('.'+options['thmbName']+' img.active', options["drawer"]);
+//TODO:: fix the .link 
+			var imgSrc=activeImg.next(options["link"]).html();
+			
+			if (options == "") options = el.data;
 // detect first or last images in gallery
-          var lastActive = $('.'+options['thmbName']+' img.active', options["drawer"]);
-          switch (toggle) {
-          	case "prev":
-              	lastActive.parent().prev().children('img').addClass('active');
-              	lastActive.removeClass('active');
-              	break;
-          	
-          	case "next":
-          		lastActive.parent().next().children('img').addClass('active');
-          		lastActive.removeClass('active');
-          		break;
-          		
-          	default: 
-//TODO:: refresh function
-          }
+			var lastActive = $('.'+options['thmbName']+' img.active', options["drawer"]);
+			switch (toggle) {
+				case "prev":
+					lastActive.parent().prev().children('img').addClass('active');
+					lastActive.removeClass('active');
+				break;
+			
+				case "next":
+					lastActive.parent().next().children('img').addClass('active');
+					lastActive.removeClass('active');
+				break;
+			
+				default: 
+//TODO:: refresh function --- ummm, do I really need it? passing with no toggle might just redo current active
 
+          }
 // set this after updating .active
     	  // possibly not necessary if we're preloading
-    	 displayImage.addClass('loading');
-    	  // if we do the .prev .now .next thing, could just set this to hide() instead of remove
-    	 displayImage.remove();
-//  Add active to first thumbnail if there is none
-          if ($("."+options['thmbName']+" img.active", options["drawer"]).length == 0) {
-          	$("."+options['thmbName'], options["drawer"]).filter(":first").children('img').addClass('active');
-          } 
-
-// Get image information from the drawer list
-
-    	  var activeImg = $('.'+options['thmbName']+' img.active', options["drawer"]);
-    
-//TODO:: fix the .link 
-	  	  var imgSrc=activeImg.next('.'+options["link"]).html();
- console.log(imgSrc);
-	 	 
-	 	 
-	 //XMARKS
+	    	 displayImage.addClass('loading');
+	    	  // if we do the .prev .now .next thing, could just set this to hide() instead of remove
+	    	 displayImage.remove();
+			 console.log(imgSrc);
 //	 Ok, so you need to review where it looks for the image src, and how it swaps out. Also does not trigger on image fade, and doesn't seem to be updating .active
-
-
     	  var imgCaption=activeImg.next().next('.'+options["capName"]).html();
     	  var imgTitle=activeImg.attr('alt');      
           var img = new Image();
@@ -176,17 +167,10 @@
     	 		options["gal"].removeClass('loading');
         		var currentHeight = 0;
 
-    // figure out image dimensions	  
-    	  if (options["gal"].hasClass('fullscreen')){
-        		$(this).css('max-width', $(window).width()-10);
-        		$(this).css('max-height', $(window).height()-10);
-        	    currentHeight = $(window).height();
-    	  }
-    	  
-    	  else {
+//   Simplest way to proportionally scale to the size of the containing element. Figure out the aspect ratio based on the thmb, then set the appropriate dimension, removing the other one.
     	  		if (activeImg.width() > activeImg.height()){
     	    	  	$(this).removeAttr('height');
-    		   		$(this).attr('width', options["gal"].css("width")); 
+    		   		$(this).attr('width', options["maxWidth"]); 
     	    	}
     	  		else {
     			    $(this).removeAttr('width');
@@ -194,8 +178,7 @@
     	  		}
 //TODO:: ok, here's an issue -- look down at the call the displayImg.load
     		  	currentHeight = $(this).height();
-    		}
-    		
+ 
     		// blah there's something here 
     		// ok this is what's supposed to happen when the gallery starts. 
     		options["gal"].animate({"height": currentHeight}, 500, function(){	
@@ -210,19 +193,30 @@
     		}).attr({
     		  "src": imgSrc,
     		  "alt": imgTitle,
-//TODO:: make sure you don't need .largeImage anymore
-    	  	  "class": 'largeImage'});
+//TODO:: make sure you don't need .displayImage anymore
+    	  	  "class": 'fgDisplay'});
         },
         
         galToggle: function(toggle, el, options) {
-        		if (el == null) el = $(this.element);
-               if (options == null) options = this.options;
-		        console.log($(this.element).attr('id')+", "+options['maxHeight']);
-               
+        
+    		if (el == null) el = this.element;
+           	if (options == null) options = this.options;
+		    console.log($(this.element).attr('id')+", "+options['maxHeight']);
 //               TOTALLY ok to be doing this, because I need it within the scope of the animate callback. 
 //TODO:: add "close" option
-	if (toggle == "open") console.log("open");
-               var self = this;    
+			if (toggle == "open") console.log("open");
+            var self = this;
+            
+//	bind resize behavior after opening               
+             var doit;
+              $(window).bind("resize", function() {
+               	   clearTimeout(doit);
+               	   doit = setTimeout(function () {
+               	   	if(self._fit() == true) self.swapImg(self.element, self.options);
+               	      	clearTimeout(doit);
+               	   }, 200);
+               	});
+                  	    
 //	        	console.log(options["id"]);
 	        	$(el).animate({height: options["maxHeight"]}, 500, function(){		    
 	        	      $("img", el).fadeIn(function(){
@@ -234,28 +228,22 @@
 	        	  		});
 	        		});
         },
-        
-        supersize: function() {
-        
-        //		this is the goofy shit	   
-        			    
-        			    $('.gallery').height($('#splash').height()+options['margin']); 
-        			    $('.largeImage').css({'max-height': ($('#splash').height()+options['margin']), 
-        						  'max-width': $('#splash').width(), 
-        						 });
-        					
-        			    $('.gallery').fadeIn();
-        			    //  $('.galleryContainer').each(function(){startSlideshow($(this));});
-        				});
-            $(window).unbind("resize");
-            $(window).bind("resize", function() {
-        	$('#splash').resizenow(90, '45px');
-              //  	startSlideshow.swapImage();
-        	});
-  
-        
-        
-        
+                
+        _fit:function() {
+        	var liveWidth = this.options["gal"].width()-this.options["margin"];
+        	var liveHeight = this.options["gal"].height()-this.options["margin"];
+        	
+        	if ((this.options["maxHeight"]-this.options["margin"]) != liveHeight){
+	        	 this.options["maxHeight"] = liveHeight;
+	        	 return true;
+        	 }
+        	if ((this.options["maxWidth"]-this.options["margin"]) != liveWidth){ 	
+        		this.options["maxWidth"] = liveWidth;
+        		return true;
+        		}
+        		
+//        			if (trigger == true) console.log((this.options["maxWidth"]-this.options["margin"])+" and "+liveWidth);
+       
         },
         
         barf: function(blerp, blorp) {
