@@ -56,7 +56,6 @@
 // Define references to elements that can live anywhere. Names can be changed in settings.
           	"drawer"   		:	$('#'+this.options["drawerName"]+id),
           	"nav"   		:	$('#'+this.options["navName"]+id),
-          	"link"			:	$('#'+this.options["linkName"]+id),
           	"info"   		:	$('#'+this.options["infoName"]+id),
           	"button"   		:	$('#'+this.options["buttonName"]+id),
           	"startWidth"   	:	startWidth,
@@ -113,8 +112,10 @@
         },
 
         swapImg: function(el, options, toggle) {
-        
 			var self = this;
+				if (options == null) options = this.options;
+				
+
 			var displayImage = $(".fgDisplay", el);
 //  Add active to first thumbnail if there is none
 			if ($("."+options['thmbName']+" img.active", options["drawer"]).length == 0) {
@@ -122,10 +123,7 @@
 			}			
 // Get image information from the drawer list	
 			var activeImg = $('.'+options['thmbName']+' img.active', options["drawer"]);
-//TODO:: fix the .link 
-			var imgSrc=activeImg.next(options["link"]).html();
-			
-			if (options == "") options = el.data;
+			var imgSrc=activeImg.parent().children('.'+options['linkName']).html();	
 // detect first or last images in gallery
 			var lastActive = $('.'+options['thmbName']+' img.active', options["drawer"]);
 			switch (toggle) {
@@ -170,6 +168,8 @@
 //   Simplest way to proportionally scale to the size of the containing element. Figure out the aspect ratio based on the thmb, then set the appropriate dimension, removing the other one.
     	  		if (activeImg.width() > activeImg.height()){
     	    	  	$(this).removeAttr('height');
+    	    	  	
+  					console.log(options["maxWidth"]+" yono");
     		   		$(this).attr('width', options["maxWidth"]); 
     	    	}
     	  		else {
@@ -197,36 +197,58 @@
     	  	  "class": 'fgDisplay'});
         },
         
-        galToggle: function(toggle, el, options) {
-        
-    		if (el == null) el = this.element;
-           	if (options == null) options = this.options;
-		    console.log($(this.element).attr('id')+", "+options['maxHeight']);
+        galToggle: function(toggle, el) {
+            var self = this;
+    		if (el == null) el = $(this.element);
+    		if (el.hasClass("open")) { 
+    			el.removeClass("open");
+    			$(window).unbind("resize", fgResize);	    
+				$("img", el).fadeOut(function() {
+					$(el).animate({height: self.options["startHeight"]}, 500);
+				});   			
+           	}
+           	else {
+           		el.addClass("open");
+           		this.options["startHeight"]=el.height();
+				console.log("open");            
+
+	//	bind resize behavior after opening               
+	             var doit;
+	             var fgResize = function() {
+		             clearTimeout(doit);
+		             doit = setTimeout(function () {
+		             	if(self._fit() == true){
+		             	 self.swapImg(self.element, self.options);
+		             	 console.log(self.options["maxWidth"]+" yo");
+		                	clearTimeout(doit);
+		                	}
+		             }, 200);
+	             };
+	              $(window).bind("resize", fgResize);
+	//	        	console.log(options["id"]);
+		        	$(el).animate({height: this.options["maxHeight"]}, 500, function(){		    
+		        	
+
+		        	      $("img", el).fadeIn(function(){
+//		        	     	$('.title', this.options["imgInfo"]).html("flarb");
+//		        			$('.caption', this.options["imgInfo"]).html('blarb');
+		        			// this	is how to call another method from a method        		
+			        		self.swapImg(el, self.options, "next");
+		        				     	
+		        	  		});
+		        		});
+           		
+           	}
+           	
+   
+		    console.log($(this.element).attr('id')+", "+this.options['maxHeight']);
 //               TOTALLY ok to be doing this, because I need it within the scope of the animate callback. 
 //TODO:: add "close" option
-			if (toggle == "open") console.log("open");
-            var self = this;
-            
-//	bind resize behavior after opening               
-             var doit;
-              $(window).bind("resize", function() {
-               	   clearTimeout(doit);
-               	   doit = setTimeout(function () {
-               	   	if(self._fit() == true) self.swapImg(self.element, self.options);
-               	      	clearTimeout(doit);
-               	   }, 200);
-               	});
-                  	    
-//	        	console.log(options["id"]);
-	        	$(el).animate({height: options["maxHeight"]}, 500, function(){		    
-	        	      $("img", el).fadeIn(function(){
-	        	     	$('.title', options["imgInfo"]).html("flarb");
-	        			$('.caption', options["imgInfo"]).html('blarb');
-	        			// this	is how to call another method from a method        		
-		        		self.swapImg(el, options, "next");
-	        				     	
-	        	  		});
-	        		});
+			if (toggle == "open") {
+						        		
+		        }
+		        
+		        
         },
                 
         _fit:function() {
@@ -239,11 +261,13 @@
         	 }
         	if ((this.options["maxWidth"]-this.options["margin"]) != liveWidth){ 	
         		this.options["maxWidth"] = liveWidth;
+        		console.log((this.options["maxWidth"]-this.options["margin"])+" and "+liveWidth);
+        		
         		return true;
+        		
         		}
         		
-//        			if (trigger == true) console.log((this.options["maxWidth"]-this.options["margin"])+" and "+liveWidth);
-       
+        		
         },
         
         barf: function(blerp, blorp) {
