@@ -27,7 +27,8 @@
          'maxHeight'		: null,
          'maxWidth'			: null,
 // Set galleryType to "multi" if every gallery on a page will have its own drawer, navigation, and info area		      
-         "galleryType"		: 'single'
+         "galleryType"		: 'single',
+         'margin'			:	45;
                 };
                 
     function Flexagon( element, options ) {
@@ -232,6 +233,29 @@
 	        				     	
 	        	  		});
 	        		});
+        },
+        
+        supersize: function() {
+        
+        //		this is the goofy shit	   
+        			    
+        			    $('.gallery').height($('#splash').height()+options['margin']); 
+        			    $('.largeImage').css({'max-height': ($('#splash').height()+options['margin']), 
+        						  'max-width': $('#splash').width(), 
+        						 });
+        					
+        			    $('.gallery').fadeIn();
+        			    //  $('.galleryContainer').each(function(){startSlideshow($(this));});
+        				});
+            $(window).unbind("resize");
+            $(window).bind("resize", function() {
+        	$('#splash').resizenow(90, '45px');
+              //  	startSlideshow.swapImage();
+        	});
+  
+        
+        
+        
         },
         
         barf: function(blerp, blorp) {
