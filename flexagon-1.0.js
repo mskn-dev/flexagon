@@ -24,11 +24,11 @@
          'infoName'			:	'fgInfo',
          'linkName'			:	'fgLink',
 // If not explicitly set, maxHeight and maxWidth will be based on the dimensions of the containing element.       
-         'maxHeight'		: null,
-         'maxWidth'			: null,
+         'maxHeight'		:    null,
+         'maxWidth'			:    null,
 // Set galleryType to "multi" if every gallery on a page will have its own drawer, navigation, and info area		      
-         "galleryType"		: 'single',
-         'margin'			:	45
+         "galleryType"		:    'single',
+         'margin'			:	 45
                 };
                 
     function Flexagon( element, options ) {
@@ -157,7 +157,6 @@
           	$(this).bind("click", function() 
           		{self.swapImg(self.element, self.options, "next");
           	});
-    console.log("hello");
 //                      	
 // TODO:: error handling goes in the params of the complete >>> function complete(responseText, textStatus, XMLHttpRequest)] / http://api.jquery.com/load/
 //    			$(this).hide();
@@ -243,7 +242,6 @@
    
 		    console.log($(this.element).attr('id')+", "+this.options['maxHeight']);
 //               TOTALLY ok to be doing this, because I need it within the scope of the animate callback. 
-//TODO:: add "close" option
 			if (toggle == "open") {
 						        		
 		        }
