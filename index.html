@@ -13,33 +13,20 @@
 
  	<script type="text/javascript">
  	  $(document).ready(function(){ 
+ 	
+ 	     
  		$('#2222').flexagon({galleryType:"multi", maxHeight: "300"});
- 		$('#5555').flexagon({galleryType:"multi", fullscreen: true});
+ 		$('#5555').flexagon({galleryType:"multi", maxHeight: "800"});
 // 		Here's how you call external methods.
-//		$('#5555').flexagon('galToggle');
+		$('#5555').flexagon('galToggle', "open");
 // 		$('.galleryContainer').flexagon('barf', "barf", "blarf");
 // 		$('body').defaultPluginName("yourOtherFunction");
 // 		$('h1').defaultPluginName({"propertyName": "jon sucks"}).defaultPluginName("yourOtherFunction");
- 	
- 	
- 	
  	});
- 	
- 	
  	
  	</script>
  
- <style>
- div.galleryContainer {
-     background-color: green;
-     
- }
  
- div.fullscreen {
-     position: fixed;
-     top: 0px;
- }
- </style>
 
 
 <!DOCTYPE html>
@@ -47,6 +34,10 @@
 <body>
  
 <!--GALLERY -->
+
+<h2 id="top">Top</h2>
+<h2 id="bottom">bottom</h2>
+
 <div class="overlay">
   <h1>The Space Between</h1>
    <h2 id="fgButton5555">Start Slideshow 1 &gt;</h2>

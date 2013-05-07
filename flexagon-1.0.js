@@ -21,8 +21,7 @@
          'maxHeight'		:    null,
          'maxWidth'			:    null,
 // Set galleryType to "multi" if every gallery on a page will have its own drawer, navigation, and info area		      
-         "galleryType"      :    'single',
-         "fullscreen"       :    false,
+         "galleryType"		:    'single',
          'margin'			:	 45
          };
     function Flexagon( element, options ) {
@@ -62,7 +61,7 @@
 //			Make gallery fixed-dimensions by making gallery container fixed-dimensions
 		if (this.options["maxHeight"] == null) this.options["maxHeight"] = this.options["gal"].height();
 		if (this.options["maxWidth"] == null) this.options["maxWidth"] = this.options["gal"].width();
-//		console.log(this.options["gal"].width());
+		console.log(this.options["gal"].width());
 //        	bind drawer
 //        	bind trigger
 //        	bind thumbs
@@ -79,7 +78,7 @@
 
 		this.options["button"].on("click", function() {
 			self.options["drawer"].show();
-			self.galToggle(self.element, self.options["fullscreen"]);
+			self.galToggle(self.element);
 //			self.swapImg(self.element, self.options);
 			});		
 // Activate buttons
@@ -150,31 +149,27 @@ console.log(self.options["maxWidth"]+" maxWidth from swapImg");
     //    			$(this).hide();
         			options["gal"].append($(this));
         	 		options["gal"].removeClass('loading');
-        	 		
-        	 		
+            		var currentHeight = 0;
     //   Simplest way to proportionally scale to the size of the containing element. Figure out the aspect ratio based on the thmb, then set the appropriate dimension, removing the other one.
-	  	$(this).removeAttr('height width max-height max-width');
-	  	
         	  		if (activeImg.width() > activeImg.height()){
         	    	  	$(this).removeAttr('height');
-console.log(options["maxWidth"]+" width from swapImg");
+console.log(options["maxWidth"]+" max width");
         		   		$(this).attr('width', options["maxWidth"]); 
         	    	}
         	  		else {
         			    $(this).removeAttr('width');
-        				$(this).attr('height', options["maxHeight"]);
-console.log(options["maxHeight"]+" height from swapImg");    
+        				$(this).attr('height', options["maxHeight"]);    
         	  		}
 //TODO:: ok, here's an issue -- look down at the call the displayImg.load
-//        		  	currentHeight = $(this).height();
+        		  	currentHeight = $(this).height();
 //TODO:: blah there's something here
 //TODO:: ok this is what's supposed to happen when the gallery starts. 
-        		options["gal"].animate({"height": options["maxHeight"]}, 500, function(){	
+        		options["gal"].animate({"height": currentHeight}, 500, function(){	
+        			    
         		      $(img).fadeIn(function(){        		      
 //TODO:    		      titles aren't addressed right
         		     	$('.fgTitle', options["imgInfo"]).html(imgTitle);
-        				$('.fgCaption', options["imgInfo"]).html(imgCaption);
-console.log("changed height");	     	
+        				$('.fgCaption', options["imgInfo"]).html(imgCaption);	     	
         		  		});
         			});
 
@@ -185,21 +180,18 @@ console.log("changed height");
     	  	  "class": 'fgDisplay'});
         },
         
-        galToggle: function (el, fullscreen) {
+        galToggle: function(toggle, el) {
             var self = this;
     		if (el == null) el = $(this.element);
-    		if ($(el).hasClass("open")) { 
-    			$(el).removeClass("open");
+    		if (el.hasClass("open")) { 
+    			el.removeClass("open");
     			$(window).unbind("resize", fgResize);	    
 				$("img", el).fadeOut(function() {
 					$(el).animate({height: self.options["startHeight"]}, 500);
 				});   			
            	}
            	else {
-               	if (fullscreen){
-               	    $(el).addClass("fullscreen")
-               	    }
-           		$(el).addClass("open");
+           		el.addClass("open");
            		this.options["startHeight"]=el.height();
 				console.log("open");            
 //	bind resize behavior after opening               
@@ -207,16 +199,12 @@ console.log("changed height");
 	             var fgResize = function() {
 		             clearTimeout(doit);
 		             doit = setTimeout(function () {
-//TODO:  _fit is supposed to update max-height and check to see if things have changed and, like, handle the aspect ratio? i suppose it could make sense to make it return false to tell things here not to swap img
-                        if(self._fit() == true){
-                            self.swapImg(self.element, self.options);
-console.log(self.options["maxWidth"]+" maxWidth from outside Fit");
-                        }
-                        if (fullscreen){
-                            self.options["maxWidth"] = ($(window).width() - self.options['margin'] );
-                            self.options["maxHeight"] = ($(window).height() - self.options['margin'] );
-                        } 
-                        clearTimeout(doit);
+//TODO:  _fit is supposed to update max-height and check to see if things have changed and, like, handle the aspect ratio?
+		                 if(self._fit() == true){
+		             	     self.swapImg(self.element, self.options);
+ console.log(self.options["maxWidth"]+" maxWidth from outside Fit");
+		                     clearTimeout(doit);
+		                	}
 		             }, 200);
 	                };
 	             $(window).bind("resize", fgResize);
@@ -229,33 +217,31 @@ console.log(self.options["maxWidth"]+" maxWidth from outside Fit");
 			            self.swapImg(el, self.options, "next");	
 	        	  		});
 	        		});
+       		
            	}   
-console.log($(this.element).attr('id')+", "+this.options['maxHeight']+" from galToggle");
+console.log($(this.element).attr('id')+", "+this.options['maxHeight']);
+			if (toggle == "open") {
+						        		
+		        }
         },
                 
         _fit:function() {
-        	var liveWidth = this.options["gal"].width()-this.options["margin"]
-//TODO:: OOOOOOk, this is where the problem is. Height is not going to resize automatically on resize. This only worked for window.height. So what we need to do get container ratio, get img ratio, get new dimensions, and then figure out if the container needs to resize height wise as well. If so, set the new maxHeight. Let swapImg or any other function do the actual resizing. just return the computed values.
+        	var liveWidth = this.options["gal"].width()-this.options["margin"];
         	var liveHeight = this.options["gal"].height()-this.options["margin"];
-        	var galRatio = liveWidth / liveHeight;
-            
-            var report = false;
-        	
 //TODO:: somethings not right here. need to see if the browser has changed and how, and return the new values?
 // Ok, what it needs to do is check, then return whether or not to set the height or the width.
-// 
         	if ((this.options["maxHeight"]-this.options["margin"]) != liveHeight){
 	        	 this.options["maxHeight"] = liveHeight;
-	        	 report = true;
+	        	 return true;
         	 }
         	if ((this.options["maxWidth"]-this.options["margin"]) != liveWidth){ 	
         		this.options["maxWidth"] = liveWidth;
 console.log((this.options["maxWidth"]-this.options["margin"])+" and "+liveWidth+" from _fit");
         		
-        		report = true;
+        		return true;
         		
         		}
-        	return report;
+        		
         		
         },
         
