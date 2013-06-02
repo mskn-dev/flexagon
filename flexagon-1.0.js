@@ -22,6 +22,7 @@
          'maxWidth'			:    null,
 // Set galleryType to "multi" if every gallery on a page will have its own drawer, navigation, and info area		      
          "galleryType"		:    'single',
+         "fullscreen"       :    false,
          'margin'			:	 45
          };
     function Flexagon( element, options ) {
@@ -207,6 +208,7 @@ console.log(options["maxWidth"]+" max width");
 		                	}
 		             }, 200);
 	                };
+//TODO:: factor in fullscreenness here. it's got to add the fullscreen class and resize height and width on window resize              
 	             $(window).bind("resize", fgResize);
 //	        	console.log(options["id"]);
 		        $(el).animate({height: this.options["maxHeight"]}, 500, function(){		    
@@ -226,23 +228,26 @@ console.log($(this.element).attr('id')+", "+this.options['maxHeight']);
         },
                 
         _fit:function() {
-        	var liveWidth = this.options["gal"].width()-this.options["margin"];
-        	var liveHeight = this.options["gal"].height()-this.options["margin"];
-//TODO:: somethings not right here. need to see if the browser has changed and how, and return the new values?
-// Ok, what it needs to do is check, then return whether or not to set the height or the width.
+        	var liveWidth = this.options["gal"].width()-this.options["margin"]
+//TODO:: OOOOOOk, this is where the problem is. Height is not going to resize automatically on resize. This only worked for window.height. So what we need to do get container ratio, get img ratio, get new dimensions, and then figure out if the container needs to resize height wise as well. If so, set the new maxHeight. Let swapImg or any other function do the actual resizing. just return the computed values.
+         	var liveHeight = this.options["gal"].height()-this.options["margin"];
+           	var galRatio = liveWidth / liveHeight;
+            
+            var report = false;
+        	
+
         	if ((this.options["maxHeight"]-this.options["margin"]) != liveHeight){
 	        	 this.options["maxHeight"] = liveHeight;
-	        	 return true;
-        	 }
+    	        report = true;
+    		 }
         	if ((this.options["maxWidth"]-this.options["margin"]) != liveWidth){ 	
         		this.options["maxWidth"] = liveWidth;
 console.log((this.options["maxWidth"]-this.options["margin"])+" and "+liveWidth+" from _fit");
         		
-        		return true;
-        		
+        		report = true;
         		}
         		
-        		
+        		return report;
         },
         
         barf: function(blerp, blorp) {
