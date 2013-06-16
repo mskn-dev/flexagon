@@ -15,10 +15,10 @@
  	  $(document).ready(function(){ 
  	
  	     
- 		$('#2222').flexagon({galleryType:"multi", maxHeight: "300"});
- 		$('#5555').flexagon({galleryType:"multi", maxHeight: "800"});
+// 		$('#2222').flexagon({galleryType:"multi", maxHeight: "300"});
+ 		$('#5555').flexagon({galleryType:"multi"});
 // 		Here's how you call external methods.
-		$('#5555').flexagon('galToggle', "open");
+//		$('#5555').flexagon('galToggle', "open");
 // 		$('.galleryContainer').flexagon('barf', "barf", "blarf");
 // 		$('body').defaultPluginName("yourOtherFunction");
 // 		$('h1').defaultPluginName({"propertyName": "jon sucks"}).defaultPluginName("yourOtherFunction");
@@ -35,41 +35,45 @@
  
 <!--GALLERY -->
 
-<h2 id="top">Top</h2>
-<h2 id="bottom">bottom</h2>
-
 <div class="overlay">
   <h1>The Space Between</h1>
    <h2 id="fgButton5555">Start Slideshow 1 &gt;</h2>
  </div>
-
-<div class="galleryContainer" id="5555" style="width:100%;">
+<div class="stuff" style="background-color: goldenrod; float: left; width: 40%;">
+<div class="galleryContainer" id="5555" style="float: left;">
+<div style="width: 100%; float: left; clear: both;">
+<div class="image-description">
+  	<div class="fgTitle">Navigate with arrow keys, the thumbnails below, or those buttons over there --&gt;</div>
+    <div class="fgCaption">&nbsp;</div>
+<!--  CONTROLS-->
+<!--#TODO:: DOES THIS NEED TO BE INSIDE IMAGE DESCRIPTION-->
+    <div class="controls">
+		  <div class="previous" id="fgPrev5555">&lt;</div>
+	  	  <div class="next" id="fgNext5555">&gt;</div>
+		  <div class="fullscreen">&nbsp;</div>
+		  <div class="drawer-toggle">&nbsp;</div>
+	  	  <div class="description-toggle"><em>i</em></div>
+ 	 </div>
+  </div>
+</div>
 <!--OVERLAY-->
 <!-- GALLERY -->
 
-	<div class="fgGallery" style="min-height: 300px; width: 100%;">
+	<div class="fgGallery">
 	<!--  IMAGE DESCRIPTION-->
-	    <div class="image-description">
-	  	<div class="fgTitle">Navigate with arrow keys, the thumbnails below, or those buttons over there --&gt;</div>
-	    <div class="fgCaption">&nbsp;</div>
-	<!--  CONTROLS-->
-	<!--#TODO:: DOES THIS NEED TO BE INSIDE IMAGE DESCRIPTION-->
-	    <div class="controls">
-			  <div class="previous" id="fgPrev5555">&lt;</div>
-		  	  <div class="next" id="fgNext5555">&gt;</div>
-			  <div class="fullscreen">&nbsp;</div>
-			  <div class="drawer-toggle">&nbsp;</div>
-		  	  <div class="description-toggle"><em>i</em></div>
-	 	 </div>
-	  </div>
+	    
 	  
     	<!--  IMAGE -->
     	<img class="fgDisplay" src="images/03.jpg" style="">
     </div>
 <!--	END GALLERY-->
+
 </div>
 <!--END GALLERY CONTAINER-->
-<div class="galleryContainer" id="2222" style="width:100%; overflow:auto;">
+</div>
+
+<div id="temp" style="display: none;">
+<div class="galleryContainer" id="2222" style=" display: none; width:100%; overflow:auto;">
 <!--OVERLAY-->
 <div class="overlay">
   <h1>The Space Between</h1>
@@ -79,25 +83,24 @@
 
 	<div class="fgGallery" style="min-height: 300px; width: 400px;">
 	<!--  IMAGE DESCRIPTION-->
-	    <div class="image-description">
-	  	<div class="title fgInfo">Navigate with arrow keys, the thumbnails below, or those buttons over there --&gt;</div>
-	    <div class="caption">&nbsp;</div>
-	<!--  CONTROLS-->
-	<!--#TODO:: DOES THIS NEED TO BE INSIDE IMAGE DESCRIPTION-->
-	    <div class="controls">
-			  <div class="previous">&lt;</div>
-		  	  <div class="next">&gt;</div>
-			  <div class="fullscreen">&nbsp;</div>
-			  <div class="drawer-toggle">&nbsp;</div>
-		  	  <div class="description-toggle"><em>i</em></div>
-	 	 </div>
-	  </div>
-	  
 	<!--  IMAGE -->
 	  <img class="fgDisplay" src="images/03.jpg" style="">
 	</div>
 <!--	END GALLERY-->
 </div>
+<div class="image-description">
+  	<div class="title fgInfo">Navigate with arrow keys, the thumbnails below, or those buttons over there --&gt;</div>
+    <div class="caption">&nbsp;</div>
+<!--  CONTROLS-->
+<!--#TODO:: DOES THIS NEED TO BE INSIDE IMAGE DESCRIPTION-->
+    <div class="controls">
+		  <div class="previous">&lt;</div>
+	  	  <div class="next">&gt;</div>
+		  <div class="fullscreen">&nbsp;</div>
+		  <div class="drawer-toggle">&nbsp;</div>
+	  	  <div class="description-toggle"><em>i</em></div>
+ 	 </div>
+  </div>
 
 
 <!--DRAWER-->
@@ -143,7 +146,7 @@
 </span></div>
 
 </div>
-
+</div>
 
 <!--END DRAWER	-->
 <div class="fgDrawer" id="fgDrawer5555" style="display:none">
