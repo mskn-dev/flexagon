@@ -4,7 +4,12 @@
      height: 125px;
       */
     }
-    
+
+.article { 
+    min-height: 500px;
+    width: 100%;
+    background: goldenrod;
+}    
 
     .thumbnail img.active {
       border:solid gold 2px; 
@@ -13,7 +18,13 @@
     .thumbnail img {
       border:solid white 2px; 
     }
+
+    .fgThumb {
+        float: left;
+
+    }
     
+
     .thumbnail {
    float: left;
     text-align: center;
@@ -157,6 +168,7 @@ display:none;
 text-align:center;
 width:100%;
 }
+
 
 
 .gallery.collapsed .image-description {

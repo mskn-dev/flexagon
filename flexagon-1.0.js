@@ -9,21 +9,21 @@
         defaults = {
 // Settings for the id names for elements which can live outside the gallery element if you want. Using IDs instead of classes within context of gallery ID so they can live anywhere on the page
         'drawerName'    : 'fgDrawer',
-        'capName'     : 'fgCaption',
+        'capName'       : 'fgCaption',
         'thmbName'      : 'fgThumb',
         'buttonName'    : 'fgButton',
-        'navName'     : 'fgNav',
+        'navName'       : 'fgNav',
         'nextName'      : 'fgNext',
         'prevName'      : 'fgPrev',
         'infoName'      : 'fgInfo',
         'linkName'      : 'fgLink',
 // If not explicitly set, maxHeight and maxWidth will be based on the dimensions of the containing element.       
-        'maxHeight'   :    null,
+        'maxHeight'     :    null,
         'maxWidth'      :    null,
 // Set galleryType to "multi" if every gallery on a page will have its own drawer, navigation, and info area          
-        "galleryType"  :    'single',
-        "fullscreen"   :    false,
-        'margin'       :    45
+        "galleryType"   :    'single',
+        "fullscreen"    :    false,
+        'margin'        :    45
          };
     function Flexagon( element, options ) {
 //    var self = this;
@@ -106,13 +106,16 @@
             var lastActive = $('.'+options['thmbName']+' img.active', options["drawer"]);
             switch (toggle) {
                 case "prev":
-                  lastActive.parent().prev().children('img').addClass('active');
-                  lastActive.removeClass('active');
+                    lastActive.parent().prev().children('img').addClass('active');
+                    lastActive.removeClass('active');
                 break;      
                 case "next":
-                  lastActive.parent().next().children('img').addClass('active');
-                  lastActive.removeClass('active');
+                    lastActive.parent().next().children('img').addClass('active');
+                    lastActive.removeClass('active');
                 break;
+                case null:
+                    imgSrc=displayImage.attr('src');
+                    break;
                 default: 
                 //TODO:: refresh function --- ummm, do I really need it? passing with no toggle might just redo current active
               }
@@ -174,24 +177,27 @@ console.log(self.options["maxWidth"]+" maxWidth from swapImg");
             
         galToggle: function(toggle, el) {
             var self = this;
+            var openHeight = self.options["maxHeight"];
             if (el == null) el = $(this.element);
             if (el.hasClass("open")) { 
                 el.removeClass("open");
-                $(window).unbind("resize", fgResize);     
-                $("img", el).fadeOut(function() {
+                $(window).unbind("resize", fgResize); 
+                // check if this is addressing correctly. if so, that'sprobably how swapImg should work
+                // console.log($('.fgDisplay', el).attr("src"));
+                $('.fgDisplay', el).fadeOut(function() {
                     $(el).animate({height: self.options["startHeight"]}, 500);
                 });       
             }
             else {
                 el.addClass("open");
-                this.options["startHeight"]=el.height();
+                self.options["startHeight"]=el.height();
                 console.log("open");            
                 //  bind resize behavior after opening               
                 var doit;
                 var fgResize = function() {
                     clearTimeout(doit);
                     doit = setTimeout(function () {
-                        self.swapImg(self.element, self.options);
+                        self.swapImg(self.element, self.options, null);
                         console.log(self.options["maxWidth"]+" maxWidth from outside Fit");
                         clearTimeout(doit);
                     }, 200);
@@ -200,12 +206,19 @@ console.log(self.options["maxWidth"]+" maxWidth from swapImg");
                 $(window).bind("resize", fgResize);
                 //            console.log(options["id"]);
                 //
-                $(el).animate({height: this.options["maxHeight"]}, 500, function(){       
-                    $("img", el).fadeIn(function(){
+                $(el).animate({height: self._fit('maxHeight')}, 500, function(){      
+                    $("img", el).css({"maxHeight": self._fit("maxHeight"), "maxWidth": self._fit("maxWidth")}).fadeIn(function(){
+                        /*
+                            display gallery titling
+                            set height of gallery container
+                               basically just run fit
+
+                        */
                 //                    $('.title', this.options["imgInfo"]).html("flarb");
                 //                  $('.caption', this.options["imgInfo"]).html('blarb');
                 // this is how to call another method from a method           
-                    self.swapImg(el, self.options, "next"); 
+                    // self.swapImg(el, self.options, "next"); 
+                    console.log('howdy');
                     });
                 });
             }   
@@ -218,20 +231,27 @@ console.log($(this.element).attr('id')+", "+this.options['maxHeight']);
         _fit:function(opt, el) {
             var self = this;
             if (el == null) el = $(this.element);
+            var selfContain = el.parent();
             var vals = [];
             var live = [];
-            live["maxWidth"] = self.options["gal"].width();
-            live["maxHeight"] = self.options["gal"].height();
-            var containW = el.parent().width();
-            var containH = el.parent().height();
+            var containW = selfContain.width()-self.options["margin"];
+            var containH = selfContain.height()-self.options["margin"];
             console.log("containerW is "+containW+" containH is "+containH);
+            // fullscreen should be toggleable, so make sure the check lets you do that. better on class?
             if (self.options['fullscreen'] != false) {
                 vals["maxHeight"] = $(window).height()-self.options["margin"];
                 vals["maxWidth"] = $(window).width()-self.options["margin"];
             } 
             
             else {
-                if (self.options[opt] != null && self.options[opt] == live[opt]){
+            /* ok, we need to look at the container values before we set / look at gallery values
+            how big is the container
+            */
+            live["maxWidth"] = self.options["gal"].width();
+            live["maxHeight"] = self.options["gal"].height();
+            console.log("live height and width"+live["maxWidth"]+" "+live["maxHeight"]);
+
+                if (self.options[opt] != null && self.options[opt] == live[opt] && live[opt] != 0){
                     vals[opt] = self.options[opt];
                 }
                 else {
@@ -239,11 +259,11 @@ console.log($(this.element).attr('id')+", "+this.options['maxHeight']);
                     console.log("ratio is "+ratio);
                     if (ratio <= 1) {
                         vals["maxWidth"] = containW - self.options["margin"];
-                        vals["maxHeight"] = vals["maxWidth"]*ratio;                    
+                        vals["maxHeight"] = (vals["maxWidth"]*ratio) - self.options["margin"];                    
                     }
                     else {
                         vals["maxHeight"] = containH - self.options["margin"];
-                        vals["maxWidth"] = vals["maxHeight"]*ratio;
+                        vals["maxWidth"] = (vals["maxHeight"]*ratio) - self.options['margin'];
                                                  
                     }
                     if (vals["maxHeight"] > $(window).height()) vals["maxHeight"] = $(window).height() - self.options["margin"];
@@ -252,7 +272,11 @@ console.log($(this.element).attr('id')+", "+this.options['maxHeight']);
                 console.log(vals[opt]+" is the "+opt);
                 return vals[opt];                
             }              
-                /* TODO:: Ok here's what needs to happen.
+                /* What we want to happen is
+                    if fullscreen, on resize, keep fullscreen dimensions
+                    if liquid container, keep aspect ratio on resize
+                    if fixed container, just fit that shit 
+                TODO:: Ok here's what needs to happen.
                 Check for fullscreen
                     yes -- use window dimensions, minus margin
                     no

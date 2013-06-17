@@ -3,7 +3,7 @@
 	<meta charset="utf-8">
 	<title>Flexagon 1.0</title>
 	
-	 <script src="../jquery-latest.min.js"></script>
+	 <script src="jquery_latest.js"></script>
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
@@ -31,7 +31,7 @@
 
 <!DOCTYPE html>
 </head>
-<body>
+<body id="flexagon_body">
  
 <!--GALLERY -->
 
@@ -39,38 +39,35 @@
   <h1>The Space Between</h1>
    <h2 id="fgButton5555">Start Slideshow 1 &gt;</h2>
  </div>
-<div class="stuff" style="background-color: goldenrod; float: left; width: 40%;">
-<div class="galleryContainer" id="5555" style="float: left;">
-<div style="width: 100%; float: left; clear: both;">
-<div class="image-description">
-  	<div class="fgTitle">Navigate with arrow keys, the thumbnails below, or those buttons over there --&gt;</div>
-    <div class="fgCaption">&nbsp;</div>
-<!--  CONTROLS-->
-<!--#TODO:: DOES THIS NEED TO BE INSIDE IMAGE DESCRIPTION-->
-    <div class="controls">
-		  <div class="previous" id="fgPrev5555">&lt;</div>
-	  	  <div class="next" id="fgNext5555">&gt;</div>
-		  <div class="fullscreen">&nbsp;</div>
-		  <div class="drawer-toggle">&nbsp;</div>
-	  	  <div class="description-toggle"><em>i</em></div>
- 	 </div>
+<div class="article"> 
+  <div class="galleryContainer" id="5555" style="float: left;">
+  <!-- <div style="width: 100%; float: left; clear: both;"> -->
+  <div class="image-description">
+      <div class="fgTitle">Navigate with arrow keys, the thumbnails below, or those buttons over there --&gt;</div>
+      <div class="fgCaption">&nbsp;</div>
+  <!--  CONTROLS-->
+  <!--#TODO:: DOES THIS NEED TO BE INSIDE IMAGE DESCRIPTION-->
+      <div class="controls">
+        <div class="previous" id="fgPrev5555">&lt;</div>
+          <div class="next" id="fgNext5555">&gt;</div>
+        <div class="fullscreen">&nbsp;</div>
+        <div class="drawer-toggle">&nbsp;</div>
+          <div class="description-toggle"><em>i</em></div>
+     </div>
+    </div>
+  <!--OVERLAY-->
+  <!-- GALLERY -->
+
+    <div class="fgGallery">
+    <!--  IMAGE DESCRIPTION-->
+        <!--  IMAGE -->
+        <img class="fgDisplay" src="images/03.jpg" style="display:none;">
+      </div>
+  <!--  END GALLERY-->
+  <!--END GALLERY CONTAINER-->
   </div>
 </div>
-<!--OVERLAY-->
-<!-- GALLERY -->
 
-	<div class="fgGallery">
-	<!--  IMAGE DESCRIPTION-->
-	    
-	  
-    	<!--  IMAGE -->
-    	<img class="fgDisplay" src="images/03.jpg" style="">
-    </div>
-<!--	END GALLERY-->
-
-</div>
-<!--END GALLERY CONTAINER-->
-</div>
 
 <div id="temp" style="display: none;">
 <div class="galleryContainer" id="2222" style=" display: none; width:100%; overflow:auto;">
@@ -128,7 +125,7 @@
 </span></div>
 
 <div class="fgThumb" style=" padding:10px;">
-  <img src="images/04.jpg" alt="PICT0386.JPG" height="48">
+  <img src="images/14.jpg" alt="PICT0386.JPG" height="48">
   <span class="jqgal fgLink">images/04.jpg</span>
   <span class="jqgal fgCaption"><p></p>
 </span></div>
@@ -172,8 +169,8 @@
 </span></div>
 
 <div class="fgThumb" style=" padding:10px;">
-  <img src="images/04.jpg" alt="PICT0386.JPG" height="48">
-  <span class="jqgal fgLink">images/04.jpg</span>
+  <img src="images/14.jpg" alt="PICT0386.JPG" height="48">
+  <span class="jqgal fgLink">images/14.jpg</span>
   <span class="jqgal fgCaption"><p></p>
 </span></div>
 
