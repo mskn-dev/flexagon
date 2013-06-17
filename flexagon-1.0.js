@@ -206,8 +206,10 @@ console.log(self.options["maxWidth"]+" maxWidth from swapImg");
                 $(window).bind("resize", fgResize);
                 //            console.log(options["id"]);
                 //
-                $(el).animate({height: self._fit('maxHeight')}, 500, function(){      
-                    $("img", el).css({"maxHeight": self._fit("maxHeight"), "maxWidth": self._fit("maxWidth")}).fadeIn(function(){
+                $(el).animate({height: self._fit('maxHeight')}, 500, function(){
+                    self.swapImg(el, self.options, null); 
+
+                    // $("img", el).css({"maxHeight": self._fit("maxHeight"), "maxWidth": self._fit("maxWidth")}).fadeIn(function(){
                         /*
                             display gallery titling
                             set height of gallery container
@@ -218,8 +220,8 @@ console.log(self.options["maxWidth"]+" maxWidth from swapImg");
                 //                  $('.caption', this.options["imgInfo"]).html('blarb');
                 // this is how to call another method from a method           
                     // self.swapImg(el, self.options, "next"); 
-                    console.log('howdy');
-                    });
+                    // console.log('howdy');
+                    // });
                 });
             }   
 console.log($(this.element).attr('id')+", "+this.options['maxHeight']);
@@ -257,6 +259,7 @@ console.log($(this.element).attr('id')+", "+this.options['maxHeight']);
                 else {
                     var ratio = containW / containH;
                     console.log("ratio is "+ratio);
+                    // something weird is happening with the ratio and the margin on resize
                     if (ratio <= 1) {
                         vals["maxWidth"] = containW - self.options["margin"];
                         vals["maxHeight"] = (vals["maxWidth"]*ratio) - self.options["margin"];                    

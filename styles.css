@@ -130,7 +130,12 @@ display:none;
     padding:0px;
     }
     
-    .controls div {padding:0px;}
+    .controls div {
+        padding:0px;
+        float: left;
+        width: 100%;
+        clear: both;
+    }
     
     
     .gallery.fullscreen {
