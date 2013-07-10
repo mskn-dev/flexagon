@@ -31,12 +31,13 @@
     text-align: center;
     width: 72px;
     }
-    .gallery-container {
-    margin:10px; 
+    .galleryContainer {
+    margin:10px;
+    height: 0px;
     background: none repeat scroll 0 0 white;
     border: 1px solid #CCCCCC;
-    float: left;
     padding: 10px;
+    width: 60%;
     }
     
     
