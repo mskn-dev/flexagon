@@ -1,8 +1,9 @@
-.gallery {
+.fgGallery {
  
       /* don't define height unless icon is sized  
      height: 125px;
       */
+      background: navy;
     }
 
 .article { 
@@ -119,7 +120,7 @@ display:none;
     width:220px;
     }
 
-    div .controls {
+    div.controls {
     background:#dfdfdf;
     float:right;
 	color: #FFFFFF;
@@ -128,16 +129,21 @@ display:none;
     line-height:19px;
     font-weight: bold;
     padding:0px;
+    width: 100%;
     }
     
-    .controls div {
-        padding:0px;
+    
+    .controls .image-description {
         float: left;
-        width: 100%;
-        clear: both;
+        width: 70%;
     }
-    
-    
+    .previous, .next {
+        width: 80px;
+        height: 40px;
+        padding-top: 25px;
+        float: left;
+        background: #555;
+    }
     .gallery.fullscreen {
     position:absolute;
     z-index:700;

@@ -176,8 +176,20 @@ console.log(self.options["maxWidth"]+" maxWidth from swapImg");
             },
             
         galToggle: function(toggle, el) {
+            /*
+            if max height, gal should open to max height
+            else
+            gal opens to height of parent element - margin
+                if parent element height = 0, use screen dimensions
+
+            */
             var self = this;
+            if (self.options["maxHeight"] != null){
             var openHeight = self.options["maxHeight"];
+                }
+            else {
+                var openHeight = self._fit("maxHeight");
+            }
             if (el == null) el = $(this.element);
             if (el.hasClass("open")) { 
                 el.removeClass("open");
@@ -206,7 +218,9 @@ console.log(self.options["maxWidth"]+" maxWidth from swapImg");
                 $(window).bind("resize", fgResize);
                 //            console.log(options["id"]);
                 //
-                $(el).animate({height: self._fit('maxHeight')}, 500, function(){
+                //TODO: WHY isn't animate working in either instance? the callback is.
+                $(el).animate({height: openHeight}, 500, function(){
+                    console.log("fuck   "+openHeight);
                     self.swapImg(el, self.options, null); 
 
                     // $("img", el).css({"maxHeight": self._fit("maxHeight"), "maxWidth": self._fit("maxWidth")}).fadeIn(function(){
