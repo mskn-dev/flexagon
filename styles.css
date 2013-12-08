@@ -100,8 +100,11 @@
     }
     
     .fullscreen {
-	background: url(fullscreen-white-trans.png) no-repeat 0px 0px transparent;
-display:none;
+	background: whitesmoke;
+/*display:none;*/
+ /*   position: absolute;
+    z-index: 1000;
+    top: 0px;*/
 	}
 	
 	.drawer-toggle {

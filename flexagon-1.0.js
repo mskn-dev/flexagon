@@ -42,10 +42,13 @@
             var id = "";
         //  When calling with the option "multi", make sure that the ids for all the associated
         //  elements end with the id for the parent gallery
-        //  TODO:: make sure fgNext and fgPrev exist and are accounted for. should not be restricted to live in fgNa
+        //TODO::JSON can avoid this by using album ID for JSON call
+        //  TODO:: make sure fgNext and fgPrev exist and are accounted for. should not be restricted to live in fgNav
             if (this.options["galleryType"] == "multi") id = $(this.element).attr('id');
+            if (this.options["fullscreen"] == "true") $(this.element).addClass('fullscreen');
             var fGallery = { 
         // Define references to elements that live inside gallery element. Not alterable in settings.
+        //TODO::JSON append these to the DOM after
                 "gal"            :  $(".fgGallery", this.element),
                 "displayImg"     :  $('.fgDisplay', this.element),
                 "id"             :  id,
@@ -60,31 +63,30 @@
                 "startHeight"     : 0
                     };
   //          Run _fit on resize. If fullscreen or liquid, _fit will refresh image when dimensions change. 
-
-
-  
             this.options = $.extend( {}, options, fGallery);
-              // console.log(this.options["gal"].width());       
-            //          bind drawer
+            // Store reference to options in element.data
+            // console.log(this.options["gal"].width());       
             //          bind trigger
             //          bind thumbs
             //          bind gal
             //          bind images
-            //          set globals
-            // Store reference to options in element.data
+            //          bind keys
             this.element.data = this.options;
-            $("."+this.options['thmbName']+" img", this.options["drawer"]).on("click", function(){
+            $("."+this.options['thmbName']+" img", this.options["drawer"]).on("click", 
+            function(){
                 $("."+self.options['thmbName']+" img.active", self.options["drawer"]).removeClass('active');
                 $(this).addClass('active');
                 self.swapImg(self.element, self.options);       
             });
-            this.options["button"].on("click", function() {
+            
+            this.options["button"].on("click", 
+            function() {
               self.options["drawer"].show();
               self.galToggle();
         //      self.swapImg(self.element, self.options);
               });   
                 // Activate buttons
-                //TODO:: probably be more crap to do here
+            //TODO:: probably be more crap to do here
             this.options["next"].on("click", function() {
                 self.swapImg(self.element, self.options, "next");
             });
@@ -126,8 +128,8 @@
              displayImage.remove();
 // console.log(imgSrc); 
 // console.log(self.options["maxWidth"]+" maxWidth from swapImg");
-            //   Ok, so you need to review where it looks for the image src, and how it swaps out. Also does not trigger on image fade, and doesn't seem to be updating .active
-            var imgCaption=activeImg.next().next('.'+options["capName"]).html();
+            //   Ok, so you need to review where it looks for the image src, and how it swaps out.  and doesn't seem to be updating .active
+            var imgCaption=activeImg.next('.'+options["capName"]).html();
             var imgTitle=activeImg.attr('alt');      
             var img = new Image();
             
@@ -140,9 +142,10 @@
             //  Need to bind on each load to add click-image-to-advance
                     $(this).bind("click", function() 
                     {self.swapImg(self.element, self.options, "next");
-                    });             
+                    }).hide();             
             // TODO:: error handling goes in the params of the complete >>> function complete(responseText, textStatus, XMLHttpRequest)] / http://api.jquery.com/load/
             //          $(this).hide();
+                
                 options["gal"].append($(this));
                 options["gal"].removeClass('loading');
                 var currentHeight = 0;
@@ -195,7 +198,6 @@
                 var openHeight = self.options["maxHeight"];
                 }
             else if (self.options["fullscreen"] == true) {
-                el.addClass("fullscreen");
                 var openHeight = $(window).height();
             }
             else {
@@ -215,7 +217,6 @@
             else {
                 el.addClass("open");
                 self.options["startHeight"]=el.height();
-                // console.log("open");            
                 //  bind resize behavior after opening               
                 var doit;
                 var fgResize = function() {
@@ -234,10 +235,7 @@
                 $(window).bind("resize", fgResize);
                 //            // console.log(options["id"]);
                 //
-                //TODO: WHY isn't animate working in either instance? the callback is.
                 $(el).animate({height: openHeight}, 1000, function(){
-                    // console.log("fuck   "+openHeight);
-                    // fit image container to gallery container
                     gal.hide();
                     gal.width(self._fit("maxWidth", gal, true));
                     gal.height(self._fit("maxHeight", gal, true));
@@ -277,7 +275,6 @@
             // whuuuuhhhh??
             var containW = selfContain.width();
             var containH = selfContain.height();
-
             if (isGal == true) {
             // Resizing image container here
 
@@ -288,15 +285,26 @@
                 get ratio
                 shrink vals accordingly
             */
+            
+            if (selfContain.hasClass("fullscreen")) {
+                     containH = $(window).height();
+                     containW = $(window).width();
+                     liveparent["maxHeight"] = containH;
+                     liveparent["maxWidth"] = containW;
+               console.log("containerW is "+containW+" containH is "+containH);
+//               console.log($(window).height());
+                el.css({"padding": (self.options["margin"]*.5)+"px",
+                        "position": "absolute",
+                        "top":    "0px",
+                        "left":    "0px",
+                        "z-index": "100000"
+                        });     
+                }
         
-            // console.log("liveparent width and height"+liveparent["maxWidth"]+" "+liveparent["maxHeight"]+" self options opt: "+self.options[opt]+" and liveparent: "+liveparent[opt]);
-
                 if (self.options[opt] != null && self.options[opt] > liveparent[opt]){
                     console.log("max values are less than live values");
                     // Max values are smaller than live values
                     var ratio = containW / containH;
-                    // console.log("ratio is "+ratio);
-                    // something weird is happening with the ratio and the margin on resize
                     if (ratio <= 1) {
                         vals["maxWidth"] = containW - self.options["margin"];
                         vals["maxHeight"] = (containH*ratio) - self.options["margin"];                    
@@ -326,13 +334,8 @@
             }
             else {
                 // Fitting image 
-                // console.log("containerW is "+containW+" containH is "+containH);
+                 console.log("containerW is "+containW+" containH is "+containH);
                 // fullscreen should be toggleable, so make sure the check lets you do that. better on class?
-                if (selfContain.parent().hasClass("fullscreen")) {
-                    vals["maxHeight"] = $(window).height()-self.options["margin"]-self.options["marginH"];
-                    vals["maxWidth"] = $(window).width()-self.options["margin"]-self.options["marginW"];
-                } 
-                else {
                     // check to see if maxHeight or maxWidth are set, and if they will fit within the live dimensions
                     if (self.options[opt] != null && self.options[opt] <= live[opt] && live[opt] != 0){
                         vals[opt] = self.options[opt];
@@ -352,7 +355,6 @@
                             vals["maxWidth"] = vals["maxHeight"]*imgRatio;
                         } 
 
-                    }
                     }
                 }
                 // console.log(vals[opt]+" is the "+opt);
